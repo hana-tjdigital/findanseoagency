@@ -1,5 +1,5 @@
 ---
-import { getMenu, getEmDashEntry } from "emdash";
+import { getMenu } from "emdash";
 import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import "../styles/theme.css";
@@ -25,11 +25,37 @@ const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 
 const menu = await getMenu("primary");
 
-// Get footer columns from home page sections
-const { entry: homePage } = await getEmDashEntry("pages", "home");
-const footerColumns = homePage?.data?.sections?.footerColumns || [];
 const footerTagline = "Curating the world's most sophisticated digital search partners for the intelligence era.";
 const copyrightText = `\u00A9 ${new Date().getFullYear()} FindAnSEOAgency`;
+const footerColumns = [
+  {
+    title: "Directory",
+    links: [
+      { label: "Top Agencies", href: "/" },
+      { label: "Pricing Models", href: "/seo-agencies" },
+      { label: "Case Studies", href: "#" },
+      { label: "Reviews", href: "#" },
+    ],
+  },
+  {
+    title: "Knowledge",
+    links: [
+      { label: "AI Optimization", href: "/ai-optimization" },
+      { label: "Search Trends", href: "#" },
+      { label: "SEO Basics", href: "/seo-agencies" },
+      { label: "Webinars", href: "#" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", href: "#" },
+      { label: "Contact", href: "#" },
+      { label: "Privacy", href: "#" },
+      { label: "Terms", href: "#" },
+    ],
+  },
+];
 
 const pageCtx = createPublicPageContext({
   Astro,

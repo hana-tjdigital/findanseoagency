@@ -3,9 +3,14 @@ import Base from '../layouts/Base.astro';
 import { getEmDashEntry, getEmDashCollection } from 'emdash';
 import { Image } from 'emdash/ui';
 
-const { entry: page, cacheHint: pageCH } = await getEmDashEntry('pages', 'home');
-const { entries: services, cacheHint: servicesCH } = await getEmDashCollection('service_categories', { orderBy: { display_order: 'asc' } });
-const { entries: agencies, cacheHint: agenciesCH } = await getEmDashCollection('agencies', { orderBy: { display_order: 'asc' } });
+const [pageRes, servicesRes, agenciesRes] = await Promise.all([
+  getEmDashEntry('pages', 'home'),
+  getEmDashCollection('service_categories', { orderBy: { display_order: 'asc' } }),
+  getEmDashCollection('agencies', { orderBy: { display_order: 'asc' } }),
+]);
+const { entry: page, cacheHint: pageCH } = pageRes;
+const { entries: services } = servicesRes;
+const { entries: agencies } = agenciesRes;
 
 Astro.cache.set(pageCH);
 
