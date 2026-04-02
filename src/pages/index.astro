@@ -266,26 +266,27 @@ const sections = page?.data?.sections || {};
       let w = 0, h = 0;
       let mouse = { x: -9999, y: -9999, active: false };
       let smoothMouse = { x: -9999, y: -9999 };
-      const LINE_COUNT = 40;
-      const STEP = 8;
+      let isVisible = true;
+      let animId = 0;
+      const LINE_COUNT = 20;
+      const STEP = 14;
 
       function resize() {
         const r = section.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         w = r.width; h = r.height;
-        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.width = w; canvas.height = h;
         canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
       }
 
       function noise(x: number, y: number, t: number) {
         return Math.sin(x * 0.003 + t * 0.0004) * 0.6
              + Math.sin(y * 0.004 - t * 0.0003) * 0.4
-             + Math.sin((x + y) * 0.002 + t * 0.0005) * 0.3
-             + Math.cos(x * 0.005 - y * 0.003 + t * 0.0002) * 0.2;
+             + Math.sin((x + y) * 0.002 + t * 0.0005) * 0.3;
       }
 
       function draw(time: number) {
+        if (!isVisible) return;
         ctx.clearRect(0, 0, w, h);
         if (mouse.active) {
           smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
@@ -309,9 +310,8 @@ const sections = page?.data?.sections || {};
             const mx = px - smoothMouse.x;
             const my = py - smoothMouse.y;
             const mDist = Math.sqrt(mx * mx + my * my);
-            const RADIUS = 250;
-            if (mDist < RADIUS && mDist > 1) {
-              const strength = ((RADIUS - mDist) / RADIUS);
+            if (mDist < 250 && mDist > 1) {
+              const strength = ((250 - mDist) / 250);
               const curve = strength * strength * 4;
               dx += (-my / mDist) * curve * STEP * 0.5;
               dy += (mx / mDist) * curve * STEP * 0.5;
@@ -323,20 +323,23 @@ const sections = page?.data?.sections || {};
           }
           const verticalPos = baseY / h;
           const edgeFade = 1 - Math.abs(verticalPos - 0.5) * 1.6;
-          const alpha = Math.max(0, 0.03 + edgeFade * 0.04 + Math.sin(time * 0.001 + i * 0.3) * 0.015);
+          const alpha = Math.max(0, 0.03 + edgeFade * 0.04);
           ctx.strokeStyle = `rgba(255, 95, 0, ${alpha})`;
-          ctx.lineWidth = 1 + edgeFade * 0.5;
+          ctx.lineWidth = 1;
           ctx.stroke();
         }
-        if (mouse.active) {
-          const grd = ctx.createRadialGradient(smoothMouse.x, smoothMouse.y, 0, smoothMouse.x, smoothMouse.y, 200);
-          grd.addColorStop(0, 'rgba(255, 95, 0, 0.06)');
-          grd.addColorStop(1, 'rgba(255, 95, 0, 0)');
-          ctx.fillStyle = grd;
-          ctx.fillRect(smoothMouse.x - 200, smoothMouse.y - 200, 400, 400);
-        }
-        if (!reducedMotion) requestAnimationFrame(draw);
+        if (!reducedMotion) animId = requestAnimationFrame(draw);
       }
+
+      // Only animate when hero is visible
+      const observer = new IntersectionObserver(([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !reducedMotion) {
+          cancelAnimationFrame(animId);
+          animId = requestAnimationFrame(draw);
+        }
+      }, { threshold: 0.1 });
+      observer.observe(section);
 
       section.addEventListener('mousemove', (e) => {
         const r = section.getBoundingClientRect();
@@ -347,7 +350,7 @@ const sections = page?.data?.sections || {};
       section.addEventListener('mouseleave', () => { mouse.active = false; });
       window.addEventListener('resize', resize);
       resize();
-      if (!reducedMotion) requestAnimationFrame(draw); else draw(0);
+      if (!reducedMotion) animId = requestAnimationFrame(draw); else draw(0);
     })();
   </script>
 </Base>
