@@ -10,7 +10,7 @@
 		{
 			"binding": "DB",
 			"database_name": "my-emdash-site",
-			// Run `wrangler d1 create my-emdash-site` and paste the ID here
+			"database_id": "1820e379-974f-41ee-a257-19f7a32ce004"
 		},
 	],
 	"r2_buckets": [
