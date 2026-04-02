@@ -1,448 +1,348 @@
 ---
-import { getEmDashCollection, getEntryTerms } from "emdash";
-import { Image } from "emdash/ui";
-import Base from "../layouts/Base.astro";
-import PostCard from "../components/PostCard.astro";
-import { getReadingTime } from "../utils/reading-time";
+import Base from '../layouts/Base.astro';
+import { getEmDashEntry, getEmDashCollection } from 'emdash';
+import { Image } from 'emdash/ui';
 
-const { entries: posts, cacheHint } = await getEmDashCollection("posts");
+const { entry: page, cacheHint: pageCH } = await getEmDashEntry('pages', 'home');
+const { entries: services, cacheHint: servicesCH } = await getEmDashCollection('service_categories', { orderBy: { display_order: 'asc' } });
+const { entries: agencies, cacheHint: agenciesCH } = await getEmDashCollection('agencies', { orderBy: { display_order: 'asc' } });
 
-Astro.cache.set(cacheHint);
+Astro.cache.set(pageCH);
 
-const sortedPosts = posts.toSorted((a, b) => {
-	const dateA = a.data.publishedAt?.getTime() ?? 0;
-	const dateB = b.data.publishedAt?.getTime() ?? 0;
-	return dateB - dateA;
-});
-
-// Find the first post with a featured image for the hero
-const featuredPost = sortedPosts.find((p) => p.data.featured_image);
-const featuredIndex = featuredPost ? sortedPosts.indexOf(featuredPost) : -1;
-
-// Get remaining posts (exclude featured if found, limit to 6 for grid)
-const gridPosts = sortedPosts.filter((_, i) => i !== featuredIndex).slice(0, 6);
-
-// Total posts shown = featured (if any) + grid posts
-const totalShown = (featuredPost ? 1 : 0) + gridPosts.length;
-const hasMorePosts = sortedPosts.length > totalShown;
-
-// Fetch tags for featured post (bylines are already hydrated by getEmDashCollection)
-let featuredTags: Array<{ slug: string; label: string }> = [];
-const featuredBylines = featuredPost?.data.bylines ?? [];
-if (featuredPost) {
-	const tags = await getEntryTerms("posts", featuredPost.data.id, "tag");
-	featuredTags = tags.map((t) => ({ slug: t.slug, label: t.label }));
-}
-
-// Fetch tags for grid posts (bylines are already hydrated by getEmDashCollection)
-const gridPostsWithTags = await Promise.all(
-	gridPosts.map(async (post) => {
-		const tags = await getEntryTerms("posts", post.data.id, "tag");
-		const bylines = post.data.bylines ?? [];
-		return {
-			post,
-			tags: tags.map((t) => ({ slug: t.slug, label: t.label })),
-			bylines,
-		};
-	})
-);
-
-// Format date helper
-function formatDate(date: Date | null | undefined) {
-	if (!date) return null;
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
-}
+const featuredAgency = agencies.find((a: any) => a.data.featured);
+const otherAgencies = agencies.filter((a: any) => !a.data.featured).slice(0, 3);
+const sections = page?.data?.sections || {};
 ---
 
-<Base title="My Blog" description="Welcome to my blog">
-	{
-		posts.length === 0 ? (
-			<section class="empty-state">
-				<h2>No posts yet</h2>
-				<p>Create your first post in the admin panel.</p>
-				<a href="/_emdash/admin/content/posts/new" class="btn">
-					Create a post
-				</a>
-			</section>
-		) : (
-			<div class="home-content">
-				{/* Featured Post - Side by side */}
-				{featuredPost && (
-					<section class="featured-section">
-						<div class="featured-grid">
-							<a href={`/posts/${featuredPost.id}`} class="featured-image-link">
-								<div class="featured-image">
-									<Image image={featuredPost.data.featured_image} />
-								</div>
-							</a>
-							<div class="featured-content">
-								<div class="featured-meta">
-									{featuredBylines.length > 0 && (
-										<>
-											<div class="featured-bylines">
-												{featuredBylines.slice(0, 2).map((credit, index) => (
-													<>
-														{index > 0 && <span class="byline-sep">,</span>}
-														<span class="featured-byline">
-															{credit.byline.avatarMediaId && (
-																<img
-																	src={`/_emdash/api/media/file/${credit.byline.avatarMediaId}`}
-																	alt={credit.byline.displayName}
-																	class="featured-byline-avatar"
-																/>
-															)}
-															<span class="featured-byline-name">
-																{credit.byline.displayName}
-															</span>
-														</span>
-													</>
-												))}
-												{featuredBylines.length > 2 && (
-													<span class="byline-more">
-														+{featuredBylines.length - 2}
-													</span>
-												)}
-											</div>
-											<span class="meta-dot" />
-										</>
-									)}
-									{formatDate(featuredPost.data.publishedAt) && (
-										<time>{formatDate(featuredPost.data.publishedAt)}</time>
-									)}
-									<span class="meta-dot" />
-									<span>
-										{getReadingTime(featuredPost.data.content)} min read
-									</span>
-								</div>
-								<a
-									href={`/posts/${featuredPost.id}`}
-									class="featured-title-link"
-								>
-									<h1 class="featured-title">{featuredPost.data.title}</h1>
-								</a>
-								{featuredPost.data.excerpt && (
-									<p class="featured-excerpt">{featuredPost.data.excerpt}</p>
-								)}
-								{featuredTags.length > 0 && (
-									<div class="featured-tags">
-										{featuredTags.map((tag) => (
-											<a href={`/tag/${tag.slug}`} class="featured-tag">
-												{tag.label}
-											</a>
-										))}
-									</div>
-								)}
-							</div>
-						</div>
-					</section>
-				)}
+<Base title={page?.data?.seo_title || 'FindAnSEOAgency'} description={page?.data?.seo_description} activeNav="/">
+  <main>
 
-				{/* Latest Posts */}
-				{gridPostsWithTags.length > 0 && (
-					<section class="posts-section">
-						<header class="section-header">
-							<h2 class="section-title">Latest</h2>
-							{hasMorePosts && (
-								<a href="/posts" class="section-link">
-									View all
-								</a>
-							)}
-						</header>
-						<div class="posts-grid">
-							{gridPostsWithTags.map(({ post, tags, bylines }) => (
-								<PostCard
-									title={post.data.title ?? "Untitled"}
-									excerpt={post.data.excerpt}
-									featuredImage={post.data.featured_image}
-									href={`/posts/${post.id}`}
-									date={post.data.publishedAt ?? undefined}
-									readingTime={getReadingTime(post.data.content)}
-									tags={tags}
-									bylines={bylines}
-								/>
-							))}
-						</div>
-					</section>
-				)}
-			</div>
-		)
-	}
+    <!-- ═══════ HERO ═══════ -->
+    <div class="h-screen p-3 md:p-5 flex flex-col">
+    <section id="hero" class="mesh-dark grain relative overflow-hidden flex-grow rounded-[1.5rem] md:rounded-[2rem]" style="border-bottom-right-radius: 0;">
+      <canvas id="hero-canvas" class="absolute inset-0 z-[1]" aria-hidden="true"></canvas>
+
+      <div class="relative z-[3] flex flex-col justify-end h-full px-8 md:px-14 pb-40">
+        {page?.data?.hero_eyebrow && (
+          <div class="section-label text-orange-light mb-6">{page.data.hero_eyebrow}</div>
+        )}
+        <h1 class="font-display text-[clamp(2.8rem,7vw,7rem)] font-700 leading-[0.9] tracking-tight text-on-dark">
+          {page?.data?.hero_title}{' '}
+          {page?.data?.hero_highlight && (
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange to-orange-light">{page.data.hero_highlight}</span>
+          )}
+        </h1>
+        <p class="mt-10 text-on-dark-muted text-lg max-w-md leading-relaxed">{page?.data?.hero_description}</p>
+      </div>
+
+      <!-- Trust bar -->
+      <div class="absolute bottom-0 right-0 z-[4] w-[58%] md:w-[45%]">
+        <div class="absolute w-[24px] h-[24px] bg-cream z-[5]" style="bottom: 100%; right: 0; clip-path: path('M 0 0 L 24 0 A 24 24 0 0 0 0 24 Z'); transform: scaleX(-1) scaleY(-1);"></div>
+        <div class="relative pl-3 pt-3 bg-cream" style="border-top-left-radius: 1.5rem;">
+          <div class="absolute w-[24px] h-[24px] bg-cream" style="bottom: 0; right: 100%; clip-path: path('M 24 24 L 0 24 A 24 24 0 0 0 24 0 Z');"></div>
+          <div class="relative overflow-hidden bg-cream" style="border-top-left-radius: 1rem;">
+            <div class="relative z-[2] py-5 overflow-hidden">
+              <div class="marquee-track" style="animation-duration: 40s;">
+                {[...Array(6)].map(() => (
+                  <span class="flex items-center gap-3 mx-8 flex-shrink-0 whitespace-nowrap">
+                    <svg viewBox="0 0 36 36" fill="none" class="w-7 h-7 flex-shrink-0" style="animation: pulseRing 4s ease-in-out infinite;">
+                      <path d="M18 3 L30 9 L30 18 C30 25.5 24.6 31.5 18 33 C11.4 31.5 6 25.5 6 18 L6 9 Z" fill="#FF5F00" opacity="0.12"/>
+                      <path d="M18 3 L30 9 L30 18 C30 25.5 24.6 31.5 18 33 C11.4 31.5 6 25.5 6 18 L6 9 Z" stroke="#FF5F00" stroke-width="1.5" fill="none"/>
+                      <path d="M13 18 L16.5 21.5 L23 14.5" stroke="#FF5F00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="font-display text-base md:text-lg font-600 text-ink tracking-tight trust-shimmer">Brought to you by experts in the field</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <!-- ═══════ SERVICES ═══════ -->
+    {services.length > 0 && (
+      <section class="pt-28 md:pt-36 pb-24 md:pb-36 px-6 md:px-10">
+        <div class="flex flex-col md:flex-row md:items-end gap-6 mb-16">
+          <span class="section-label">01</span>
+          <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight text-dark leading-[0.9]">What you'll find here</h2>
+        </div>
+        <div class="divide-y divide-warm-gray">
+          {services.map((service: any, i: number) => (
+            <div class="service-row group py-8 md:py-10">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-6 md:gap-10">
+                  <span class="font-mono text-[11px] text-ink-muted">0{i + 1}</span>
+                  <h3 class="font-display text-2xl md:text-4xl font-600 text-dark group-hover:text-orange transition-colors duration-400">{service.data.title}</h3>
+                </div>
+                <div class="flex items-center gap-4">
+                  <span class="hidden md:block font-mono text-[10px] tracking-[0.15em] uppercase text-ink-muted">{service.data.label}</span>
+                  <svg class="text-ink-faint group-hover:text-orange group-hover:rotate-[-45deg] transition-all duration-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+              </div>
+              <div class="service-desc text-ink-light text-sm md:text-base max-w-xl ml-[calc(1.5rem+2.5rem)] md:ml-[calc(2.5rem+3.5rem)] leading-relaxed">
+                {service.data.description}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ HOW IT WORKS ═══════ -->
+    {sections.howItWorks && (
+      <section class="bg-dark text-on-dark relative grain">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange/5 blur-[200px] rounded-full pointer-events-none"></div>
+        <div class="pt-24 md:pt-36 pb-12 px-6 md:px-10">
+          <div class="flex flex-col md:flex-row md:items-end gap-6">
+            <span class="section-label text-orange-light">02</span>
+            <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9]">How it works</h2>
+          </div>
+        </div>
+        <div class="relative z-[2] px-6 md:px-10 pb-24 md:pb-36">
+          {sections.howItWorks.map((step: any, i: number) => (
+            <div class="sticky h-[60vh] md:h-[50vh] mb-6" style={`top: calc(6rem + ${i * 2.5}rem);`}>
+              <div class="bg-dark-elevated border border-dark-border rounded-3xl p-8 md:p-12 h-full flex flex-col md:flex-row gap-8 md:gap-14 items-start md:items-center relative overflow-hidden" style={`box-shadow: 0 -8px 30px rgba(0,0,0,${0.3 + i * 0.15});`}>
+                <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange/15 to-transparent"></div>
+                <div class="flex-shrink-0">
+                  <span class="font-display text-[5rem] md:text-[8rem] font-700 leading-none text-transparent bg-clip-text bg-gradient-to-b from-orange/40 to-dark-border">{step.step}</span>
+                </div>
+                <div class="flex-grow">
+                  <h3 class="font-display text-2xl md:text-4xl font-600 mb-4">{step.title}</h3>
+                  <p class="text-on-dark-muted text-base md:text-lg leading-relaxed max-w-lg">{step.description}</p>
+                </div>
+                <div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-dark border border-dark-border flex items-center justify-center">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF5F00" stroke-width="1.5" stroke-linecap="round">
+                    {i === 0 && <><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></>}
+                    {i === 1 && <><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></>}
+                    {i === 2 && <><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></>}
+                  </svg>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ FEATURED AGENCY ═══════ -->
+    {featuredAgency && (
+      <section class="relative min-h-[80vh] flex items-end overflow-hidden">
+        {featuredAgency.data.hero_image?.src ? (
+          <img alt="" class="absolute inset-0 w-full h-full object-cover" src={featuredAgency.data.hero_image.src} aria-hidden="true" />
+        ) : (
+          <div class="absolute inset-0 bg-dark-surface"></div>
+        )}
+        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/90 to-dark/30"></div>
+        <div class="absolute inset-0 bg-orange/5 mix-blend-multiply"></div>
+        <div class="relative z-10 w-full px-6 md:px-10 pb-16 md:pb-24 pt-40">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-10">
+            <div class="max-w-2xl">
+              <span class="section-label text-orange-light">03 — Featured</span>
+              <h2 class="font-display text-5xl md:text-8xl font-700 tracking-tight text-on-dark leading-[0.9] mt-4">{featuredAgency.data.title}</h2>
+              <div class="flex items-center gap-4 mt-4">
+                <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-orange bg-orange/15 px-3 py-1 rounded-full">{featuredAgency.data.badge}</span>
+                {featuredAgency.data.retention_rate && (
+                  <span class="font-mono text-[10px] tracking-wider text-on-dark-muted">{featuredAgency.data.retention_rate}</span>
+                )}
+              </div>
+              <p class="text-on-dark-muted text-lg leading-relaxed mt-6 max-w-lg">{featuredAgency.data.description}</p>
+            </div>
+            <button class="bg-orange hover:bg-orange-dim text-white px-8 py-4 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,95,0,0.3)] whitespace-nowrap self-start md:self-end">
+              {featuredAgency.data.cta_text || 'View Profile'}
+            </button>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ TOP RATED ═══════ -->
+    {otherAgencies.length > 0 && (
+      <section id="top-rated" class="py-24 md:py-32 px-6 md:px-10 bg-dark text-on-dark relative overflow-hidden grain">
+        <div class="flex flex-col md:flex-row md:items-end gap-6 mb-16 relative z-[2]">
+          <span class="section-label text-orange-light">04</span>
+          <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9]">Top rated</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-[2]">
+          {otherAgencies.map((agency: any, i: number) => (
+            <div class={`stack-card bg-dark-elevated/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 cursor-pointer relative overflow-hidden ${i === 1 ? 'md:-mt-6' : ''} ${i === 2 ? 'md:mt-3' : ''}`}>
+              <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange/30 to-transparent"></div>
+              <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-40 h-20 bg-orange/8 blur-[40px] rounded-full pointer-events-none"></div>
+              <div class="flex items-center justify-between mb-8 relative z-[2]">
+                <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-on-dark-muted">0{i + 1}</span>
+                <div class="flex items-center gap-1">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#FF5F00"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="font-mono text-sm font-500">{agency.data.rating}</span>
+                </div>
+              </div>
+              <h3 class="font-display text-2xl font-600 mb-3 relative z-[2]">{agency.data.title}</h3>
+              <p class="text-on-dark-muted text-sm leading-relaxed mb-8 relative z-[2]">{agency.data.description}</p>
+              <div class="flex items-center justify-between pt-6 border-t border-dark-border relative z-[2]">
+                <span class="font-mono text-[9px] tracking-[0.2em] uppercase text-orange">{agency.data.badge}</span>
+                <svg class="text-on-dark-faint" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ SIDE PANELS ═══════ -->
+    {(sections.eventCard || sections.joinCard) && (
+      <section class="px-6 md:px-10 pb-24 bg-cream-dark">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {sections.eventCard && (
+            <div class="bg-dark text-on-dark rounded-3xl p-10 md:p-14 flex flex-col justify-between min-h-[280px] relative overflow-hidden grain">
+              <div class="absolute top-0 right-0 w-48 h-48 bg-orange/8 blur-[80px] rounded-full pointer-events-none"></div>
+              <div class="relative z-[2]">
+                <span class="section-label text-orange-light">{sections.eventCard.label}</span>
+                <h4 class="font-display text-3xl md:text-4xl font-600 mt-4 leading-tight">{sections.eventCard.title}</h4>
+              </div>
+              <div class="relative z-[2] flex items-center gap-3 font-mono text-[11px] text-on-dark-muted tracking-wider">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5F00" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <span>{sections.eventCard.date}</span>
+              </div>
+            </div>
+          )}
+          {sections.joinCard && (
+            <div class="bg-orange text-white rounded-3xl p-10 md:p-14 flex flex-col justify-between min-h-[280px] relative overflow-hidden">
+              <div class="absolute inset-0 opacity-10" aria-hidden="true">
+                <svg width="100%" height="100%" class="absolute inset-0">
+                  <pattern id="diag" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="40" stroke="white" stroke-width="0.5"/>
+                  </pattern>
+                  <rect width="100%" height="100%" fill="url(#diag)"/>
+                </svg>
+              </div>
+              <h4 class="font-display text-3xl md:text-4xl font-600 leading-tight relative z-[2]">{sections.joinCard.title}</h4>
+              <div class="flex items-center gap-3 cursor-pointer group relative z-[2]">
+                <span class="font-display font-500 text-base">{sections.joinCard.buttonText}</span>
+                <svg class="group-hover:translate-x-2 transition-transform duration-300" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ CTA / NEWSLETTER ═══════ -->
+    {page?.data?.cta_title && page.data.cta_style === 'newsletter' && (
+      <section class="mesh-dark grain relative py-28 md:py-40 px-6 md:px-10 overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange/8 blur-[200px] rounded-full pointer-events-none pulse-glow"></div>
+        <div class="relative z-[3] max-w-3xl">
+          <span class="section-label text-orange-light">05 — Connect</span>
+          <h2 class="font-display text-5xl md:text-8xl font-700 tracking-tight text-on-dark leading-[0.85] mt-6">{page.data.cta_title}</h2>
+          <p class="text-on-dark-muted text-lg leading-relaxed mt-6 mb-12 max-w-md">{page.data.cta_description}</p>
+          <div class="max-w-md">
+            <div class="flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full overflow-hidden hover:border-orange/30 transition-colors duration-500">
+              <input class="flex-grow py-4 px-6 text-sm font-body text-on-dark placeholder:text-on-dark-faint bg-transparent focus:outline-none" placeholder="Enter your business email" type="email" />
+              <button class="bg-orange hover:bg-orange-dim text-white m-1.5 px-6 py-3 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 whitespace-nowrap hover:shadow-[0_0_30px_rgba(255,95,0,0.3)]">
+                {page.data.cta_btn_text}
+              </button>
+            </div>
+            <p class="mt-4 font-mono text-[10px] tracking-wider text-on-dark-faint ml-6">Join 15,000+ marketers. No spam.</p>
+          </div>
+        </div>
+      </section>
+    )}
+
+  </main>
+
+  <!-- ═══════ HERO CANVAS ═══════ -->
+  <script>
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    (function heroCanvas() {
+      const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d')!;
+      const section = document.getElementById('hero')!;
+      let w = 0, h = 0;
+      let mouse = { x: -9999, y: -9999, active: false };
+      let smoothMouse = { x: -9999, y: -9999 };
+      const LINE_COUNT = 40;
+      const STEP = 8;
+
+      function resize() {
+        const r = section.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = r.width; h = r.height;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function noise(x: number, y: number, t: number) {
+        return Math.sin(x * 0.003 + t * 0.0004) * 0.6
+             + Math.sin(y * 0.004 - t * 0.0003) * 0.4
+             + Math.sin((x + y) * 0.002 + t * 0.0005) * 0.3
+             + Math.cos(x * 0.005 - y * 0.003 + t * 0.0002) * 0.2;
+      }
+
+      function draw(time: number) {
+        ctx.clearRect(0, 0, w, h);
+        if (mouse.active) {
+          smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+          smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+        } else {
+          smoothMouse.x += (-9999 - smoothMouse.x) * 0.02;
+          smoothMouse.y += (-9999 - smoothMouse.y) * 0.02;
+        }
+        for (let i = 0; i < LINE_COUNT; i++) {
+          const baseY = (h / (LINE_COUNT - 1)) * i;
+          const drift = Math.sin(time * 0.0003 + i * 0.7) * 25;
+          let px = -20;
+          let py = baseY + drift;
+          ctx.beginPath();
+          ctx.moveTo(px, py);
+          const maxSteps = Math.ceil((w + 40) / STEP);
+          for (let s = 0; s < maxSteps; s++) {
+            const angle = noise(px, py, time) * 0.8;
+            let dx = Math.cos(angle) * STEP;
+            let dy = Math.sin(angle) * STEP * 0.6;
+            const mx = px - smoothMouse.x;
+            const my = py - smoothMouse.y;
+            const mDist = Math.sqrt(mx * mx + my * my);
+            const RADIUS = 250;
+            if (mDist < RADIUS && mDist > 1) {
+              const strength = ((RADIUS - mDist) / RADIUS);
+              const curve = strength * strength * 4;
+              dx += (-my / mDist) * curve * STEP * 0.5;
+              dy += (mx / mDist) * curve * STEP * 0.5;
+            }
+            px += dx;
+            py += dy;
+            ctx.lineTo(px, py);
+            if (px > w + 40) break;
+          }
+          const verticalPos = baseY / h;
+          const edgeFade = 1 - Math.abs(verticalPos - 0.5) * 1.6;
+          const alpha = Math.max(0, 0.03 + edgeFade * 0.04 + Math.sin(time * 0.001 + i * 0.3) * 0.015);
+          ctx.strokeStyle = `rgba(255, 95, 0, ${alpha})`;
+          ctx.lineWidth = 1 + edgeFade * 0.5;
+          ctx.stroke();
+        }
+        if (mouse.active) {
+          const grd = ctx.createRadialGradient(smoothMouse.x, smoothMouse.y, 0, smoothMouse.x, smoothMouse.y, 200);
+          grd.addColorStop(0, 'rgba(255, 95, 0, 0.06)');
+          grd.addColorStop(1, 'rgba(255, 95, 0, 0)');
+          ctx.fillStyle = grd;
+          ctx.fillRect(smoothMouse.x - 200, smoothMouse.y - 200, 400, 400);
+        }
+        if (!reducedMotion) requestAnimationFrame(draw);
+      }
+
+      section.addEventListener('mousemove', (e) => {
+        const r = section.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+        mouse.active = true;
+      });
+      section.addEventListener('mouseleave', () => { mouse.active = false; });
+      window.addEventListener('resize', resize);
+      resize();
+      if (!reducedMotion) requestAnimationFrame(draw); else draw(0);
+    })();
+  </script>
 </Base>
-
-<style>
-	.home-content {
-		max-width: var(--wide-width);
-		margin: 0 auto;
-		padding: var(--spacing-16) var(--spacing-6);
-	}
-
-	/* Featured Section - Side by side */
-	.featured-section {
-		margin-bottom: var(--spacing-16);
-	}
-
-	.featured-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-8);
-		align-items: center;
-	}
-
-	.featured-image-link {
-		grid-column: 1 / 3;
-		display: block;
-		/* Extend to viewport edge, but cap at -6rem minimum extension */
-		margin-left: min(
-			-6rem,
-			calc(-1 * (var(--spacing-6) + (100vw - var(--wide-width)) / 2))
-		);
-	}
-
-	.featured-image {
-		overflow: hidden;
-		border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-		background: var(--color-surface);
-	}
-
-	.featured-image img {
-		width: 100%;
-		height: auto;
-		aspect-ratio: 4 / 3;
-		object-fit: cover;
-		transition: transform 0.4s ease;
-	}
-
-	.featured-image-link:hover .featured-image img,
-	.featured-grid:has(.featured-title-link:hover) .featured-image img {
-		transform: scale(1.02);
-	}
-
-	.featured-content {
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-4);
-	}
-
-	.featured-meta {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		column-gap: var(--spacing-3);
-		row-gap: var(--spacing-1);
-		font-size: var(--font-size-sm);
-		color: var(--color-muted);
-	}
-
-	.meta-dot {
-		width: 3px;
-		height: 3px;
-		border-radius: 50%;
-		background: var(--color-muted);
-	}
-
-	/* Featured bylines */
-	.featured-bylines {
-		display: flex;
-		align-items: center;
-		gap: 2px;
-	}
-
-	.featured-byline {
-		display: inline-flex;
-		align-items: center;
-		gap: var(--spacing-2);
-	}
-
-	.featured-byline-avatar {
-		width: var(--avatar-size-md);
-		height: var(--avatar-size-md);
-		border-radius: 50%;
-		object-fit: cover;
-	}
-
-	.featured-byline-name {
-		font-weight: 500;
-		color: var(--color-text-secondary);
-	}
-
-	.byline-sep {
-		color: var(--color-muted);
-		margin-right: 2px;
-	}
-
-	.byline-more {
-		font-size: var(--font-size-xs);
-		color: var(--color-muted);
-		margin-left: 2px;
-	}
-
-	.featured-title-link {
-		text-decoration: none;
-		color: inherit;
-	}
-
-	.featured-title {
-		font-size: clamp(var(--font-size-2xl), 4vw, var(--font-size-4xl));
-		font-weight: 700;
-		line-height: var(--leading-tight);
-		letter-spacing: var(--tracking-tight);
-		transition: color var(--transition-fast);
-	}
-
-	.featured-title-link:hover .featured-title,
-	.featured-grid:has(.featured-image-link:hover) .featured-title {
-		color: var(--color-accent);
-	}
-
-	.featured-excerpt {
-		font-size: var(--font-size-lg);
-		line-height: var(--leading-relaxed);
-		color: var(--color-text-secondary);
-	}
-
-	.featured-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--spacing-2);
-		margin-top: var(--spacing-2);
-	}
-
-	.featured-tag {
-		display: inline-block;
-		padding: var(--spacing-1) var(--spacing-3);
-		font-size: var(--font-size-sm);
-		color: var(--color-text-secondary);
-		background: var(--color-surface);
-		border-radius: var(--radius);
-		text-decoration: none;
-		transition:
-			color var(--transition-fast),
-			background var(--transition-fast);
-	}
-
-	.featured-tag:hover {
-		color: var(--color-text);
-		background: var(--color-border);
-	}
-
-	/* Section header */
-	.section-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		margin-bottom: var(--spacing-8);
-		padding-bottom: var(--spacing-4);
-		border-bottom: 1px solid var(--color-border-subtle);
-	}
-
-	.section-title {
-		font-size: var(--font-size-sm);
-		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: var(--tracking-wider);
-		color: var(--color-muted);
-	}
-
-	.section-link {
-		font-size: var(--font-size-sm);
-		color: var(--color-accent);
-		text-decoration: none;
-		transition: color var(--transition-fast);
-	}
-
-	.section-link:hover {
-		color: var(--color-accent-hover);
-	}
-
-	/* Posts Grid */
-	.posts-section {
-	}
-
-	.posts-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--spacing-12) var(--spacing-8);
-	}
-
-	/* Empty State */
-	.empty-state {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: var(--spacing-3);
-		text-align: center;
-		padding: var(--spacing-20) var(--spacing-6);
-		max-width: 400px;
-		margin: 0 auto;
-	}
-
-	.empty-state h2 {
-		font-size: var(--font-size-2xl);
-		font-weight: 600;
-	}
-
-	.empty-state p {
-		color: var(--color-muted);
-	}
-
-	.btn {
-		display: inline-block;
-		margin-top: var(--spacing-4);
-		padding: var(--spacing-3) var(--spacing-6);
-		background: var(--color-accent);
-		color: var(--color-on-accent);
-		text-decoration: none;
-		border-radius: var(--radius);
-		font-size: var(--font-size-sm);
-		font-weight: 500;
-		transition: background var(--transition-fast);
-	}
-
-	.btn:hover {
-		background: var(--color-accent-hover);
-	}
-
-	/* Responsive */
-	@media (max-width: 900px) {
-		.home-content {
-			padding: var(--spacing-6) var(--spacing-4) var(--spacing-12);
-		}
-
-		.featured-image-link {
-			margin-left: 0;
-		}
-
-		.featured-grid {
-			grid-template-columns: 1fr;
-			gap: var(--spacing-6);
-		}
-
-		.featured-image {
-			border-radius: var(--radius-lg);
-		}
-
-		.featured-image img {
-			aspect-ratio: 16 / 9;
-		}
-
-		.posts-grid {
-			grid-template-columns: repeat(2, 1fr);
-			gap: var(--spacing-8) var(--spacing-6);
-		}
-	}
-
-	@media (max-width: 600px) {
-		.featured-title {
-			font-size: var(--font-size-2xl);
-		}
-
-		.posts-grid {
-			grid-template-columns: 1fr;
-			gap: var(--spacing-8);
-		}
-	}
-</style>

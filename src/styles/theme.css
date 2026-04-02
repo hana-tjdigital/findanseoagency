@@ -1,110 +1,190 @@
-/*
-  theme.css — override any :root variable here to retheme the blog.
+@import "tailwindcss";
 
-  This is the only file you need to edit to customize the site's visual
-  appearance. All defaults are listed below as comments. Uncomment and
-  change any value to override it.
+@theme {
+  --font-display: "Clash Display", sans-serif;
+  --font-body: "Satoshi", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 
-  Note: this template defines explicit dark mode colors in Base.astro.
-  Overriding light-mode --color-* variables here won't affect dark mode.
-  To customize dark mode, also override --color-* variables inside a
-  @media (prefers-color-scheme: dark) block and/or in the :root.dark rule.
-*/
+  --color-orange: #FF5F00;
+  --color-orange-light: #FF8C42;
+  --color-orange-dim: #E05400;
+  --color-orange-glow: #FF5F0033;
+  --color-orange-subtle: #FFF4ED;
 
-:root {
-	/* --- Colors ---
-	--color-bg: #ffffff;
-	--color-bg-subtle: #fafafa;
-	--color-text: #1a1a1a;
-	--color-text-secondary: #525252;
-	--color-muted: #8b8b8b;
-	--color-border: #e5e5e5;
-	--color-border-subtle: #f0f0f0;
-	--color-surface: #f7f7f7;
-	--color-accent: #0066cc;
-	--color-accent-hover: #0052a3;
-	--color-on-accent: white;
-	--color-accent-ring: color-mix(in srgb, var(--color-accent) 25%, transparent);
-	*/
+  --color-dark: #0B0B0B;
+  --color-dark-surface: #121212;
+  --color-dark-elevated: #1A1A1A;
+  --color-dark-border: #252525;
 
-	/* --- Fonts ---
-	--font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-	*/
+  --color-cream: #FAF8F5;
+  --color-cream-dark: #F0EDE8;
+  --color-warm-gray: #E2DDD7;
 
-	/* --- Type scale ---
-	--font-size-xs: 0.8125rem;
-	--font-size-sm: 0.875rem;
-	--font-size-base: 1rem;
-	--font-size-lg: 1.125rem;
-	--font-size-xl: 1.25rem;
-	--font-size-2xl: 1.5rem;
-	--font-size-3xl: 2rem;
-	--font-size-4xl: 2.5rem;
-	--font-size-5xl: 3.5rem;
-	*/
+  --color-ink: #0B0B0B;
+  --color-ink-light: #555;
+  --color-ink-muted: #999;
+  --color-ink-faint: #CCC;
 
-	/* --- Line heights ---
-	--leading-tight: 1.15;
-	--leading-snug: 1.3;
-	--leading-normal: 1.5;
-	--leading-relaxed: 1.7;
-	*/
+  --color-on-dark: #FAF8F5;
+  --color-on-dark-muted: #777;
+  --color-on-dark-faint: #444;
+}
 
-	/* --- Letter spacing ---
-	--tracking-tight: -0.03em;    used on h1 and large titles
-	--tracking-snug: -0.02em;     used on h2–h6, site/card titles
-	--tracking-wide: 0.06em;      used on meta labels, TOC/widget titles
-	--tracking-wider: 0.08em;     used on footer headings, section labels
-	*/
+/* ═══════ BASE ═══════ */
+html { scroll-behavior: smooth; }
+::selection { background: #FF5F00; color: white; }
+*:focus-visible { outline: 2px solid #FF5F00; outline-offset: 2px; }
 
-	/* --- Spacing ---
-	--spacing-1: 0.25rem;
-	--spacing-2: 0.5rem;
-	--spacing-3: 0.75rem;
-	--spacing-4: 1rem;
-	--spacing-5: 1.25rem;
-	--spacing-6: 1.5rem;
-	--spacing-8: 2rem;
-	--spacing-10: 2.5rem;
-	--spacing-12: 3rem;
-	--spacing-16: 4rem;
-	--spacing-20: 5rem;
-	--spacing-24: 6rem;
-	*/
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
-	/* --- Layout ---
-	--content-width: 680px;       article/page body column width
-	--wide-width: 1200px;         max container width (home, archives)
-	--gutter-width: 200px;        right sidebar column (TOC) on article pages
-	--meta-col-width: 180px;      left meta column on article pages
-	--nav-height: 64px;           sticky header height
-	--search-input-width: 180px;  nav search box width
-	*/
+/* ═══════ ANIMATED MESH GRADIENT ═══════ */
+@keyframes meshDrift {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 50% 0%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 100%; }
+}
 
-	/* --- Borders & radius ---
-	--radius: 4px;
-	--radius-lg: 8px;
-	*/
+.mesh-dark {
+  background:
+    radial-gradient(ellipse at 20% 50%, #1a0800 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, #0d0500 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, #140a00 0%, transparent 50%),
+    #0B0B0B;
+  background-size: 200% 200%;
+  animation: meshDrift 20s ease-in-out infinite;
+}
 
-	/* --- Transitions ---
-	--transition-fast: 120ms ease;
-	--transition-base: 180ms ease;
-	*/
+/* ═══════ GRAIN TEXTURE ═══════ */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
 
-	/* --- Avatars ---
-	--avatar-size-xs: 18px;    card byline avatars
-	--avatar-size-sm: 20px;    post list byline avatars
-	--avatar-size-md: 24px;    featured post byline avatars
-	--avatar-size-lg: 32px;    single post byline avatars
-	*/
+/* ═══════ MARQUEE ═══════ */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 60s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
 
-	/* --- Shadows ---
-	--shadow-dropdown: 0 8px 30px rgba(0, 0, 0, 0.12);
-	--shadow-btn-active: 0 1px 2px rgba(0, 0, 0, 0.05);
-	*/
+/* ═══════ FLOAT ANIMATION ═══════ */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-12px) rotate(1deg); }
+  66% { transform: translateY(6px) rotate(-1deg); }
+}
+.float { animation: float 8s ease-in-out infinite; }
+.float-delayed { animation: float 8s ease-in-out 2s infinite; }
+.float-slow { animation: float 12s ease-in-out infinite; }
 
-	/* --- Misc ---
-	--tag-padding-y: 2px;    vertical padding on tag pills
-	*/
+/* ═══════ PULSE RING ═══════ */
+@keyframes pulseRing {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.15); opacity: 0.8; }
+}
+
+/* ═══════ TRUST SHIMMER ═══════ */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.trust-shimmer {
+  background: linear-gradient(90deg, #0B0B0B 40%, #FF5F00 50%, #0B0B0B 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+/* ═══════ PULSE GLOW ═══════ */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+.pulse-glow { animation: pulseGlow 4s ease-in-out infinite; }
+
+/* ═══════ REVEAL ON HOVER ═══════ */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════ STACKING DEPTH ═══════ */
+.stack-card {
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.5s ease;
+}
+.stack-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 30px 60px -15px rgba(0,0,0,0.2);
+}
+
+/* ═══════ SECTION LABEL ═══════ */
+.section-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #FF5F00;
+}
+
+/* ═══════ SCROLLBAR ═══════ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0B0B0B; }
+::-webkit-scrollbar-thumb { background: #FF5F00; border-radius: 2px; }
+
+/* ═══════ SERVICE LIST INTERACTIVE ═══════ */
+.service-row {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.service-row::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #FF5F00;
+  transition: width 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.service-row:hover::before {
+  width: 100%;
+}
+.service-row:hover {
+  padding-left: 1.5rem;
+}
+.service-row .service-desc {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.3s ease, padding 0.4s ease;
+  padding-top: 0;
+}
+.service-row:hover .service-desc {
+  max-height: 120px;
+  opacity: 1;
+  padding-top: 0.75rem;
 }

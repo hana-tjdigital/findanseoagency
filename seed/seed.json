@@ -2,17 +2,80 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Blog Starter",
-		"description": "A blog with posts and pages",
-		"author": "EmDash"
+		"name": "FindAnSEOAgency",
+		"description": "The definitive directory for performance-driven SEO agencies",
+		"author": "FindAnSEOAgency"
 	},
 
 	"settings": {
-		"title": "My Blog",
-		"tagline": "Thoughts on building for the web"
+		"title": "FindAnSEOAgency",
+		"tagline": "The definitive directory for performance-driven SEO agencies."
 	},
 
 	"collections": [
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "hero_eyebrow", "label": "Hero Eyebrow", "type": "string" },
+				{ "slug": "hero_title", "label": "Hero Title", "type": "text" },
+				{ "slug": "hero_highlight", "label": "Hero Highlight", "type": "string" },
+				{ "slug": "hero_description", "label": "Hero Description", "type": "text" },
+				{ "slug": "hero_image", "label": "Hero Image", "type": "image" },
+				{ "slug": "hero_primary_btn_text", "label": "Hero Primary Button Text", "type": "string" },
+				{ "slug": "hero_primary_btn_link", "label": "Hero Primary Button Link", "type": "string" },
+				{ "slug": "hero_secondary_btn_text", "label": "Hero Secondary Button Text", "type": "string" },
+				{ "slug": "hero_secondary_btn_link", "label": "Hero Secondary Button Link", "type": "string" },
+				{ "slug": "hero_stat_label", "label": "Hero Stat Label", "type": "string" },
+				{ "slug": "hero_stat_value", "label": "Hero Stat Value", "type": "string" },
+				{ "slug": "hero_stat_description", "label": "Hero Stat Description", "type": "string" },
+				{ "slug": "sections", "label": "Sections", "type": "json" },
+				{ "slug": "cta_title", "label": "CTA Title", "type": "text" },
+				{ "slug": "cta_description", "label": "CTA Description", "type": "text" },
+				{ "slug": "cta_btn_text", "label": "CTA Button Text", "type": "string" },
+				{ "slug": "cta_btn_link", "label": "CTA Button Link", "type": "string" },
+				{ "slug": "cta_style", "label": "CTA Style", "type": "string" },
+				{ "slug": "seo_title", "label": "SEO Title", "type": "string" },
+				{ "slug": "seo_description", "label": "SEO Description", "type": "text" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true }
+			]
+		},
+		{
+			"slug": "agencies",
+			"label": "Agencies",
+			"labelSingular": "Agency",
+			"supports": ["drafts", "revisions", "search", "seo"],
+			"fields": [
+				{ "slug": "title", "label": "Name", "type": "string", "required": true, "searchable": true },
+				{ "slug": "description", "label": "Description", "type": "text", "searchable": true },
+				{ "slug": "rating", "label": "Rating", "type": "number" },
+				{ "slug": "badge", "label": "Badge", "type": "string" },
+				{ "slug": "badge_style", "label": "Badge Style", "type": "string" },
+				{ "slug": "icon", "label": "Icon", "type": "string" },
+				{ "slug": "logo_image", "label": "Logo", "type": "image" },
+				{ "slug": "hero_image", "label": "Hero Image", "type": "image" },
+				{ "slug": "retention_rate", "label": "Retention Rate", "type": "string" },
+				{ "slug": "cta_text", "label": "CTA Text", "type": "string" },
+				{ "slug": "featured", "label": "Featured", "type": "boolean" },
+				{ "slug": "display_order", "label": "Display Order", "type": "integer" }
+			]
+		},
+		{
+			"slug": "service_categories",
+			"label": "Service Categories",
+			"labelSingular": "Service Category",
+			"supports": ["drafts"],
+			"fields": [
+				{ "slug": "title", "label": "Title", "type": "string", "required": true },
+				{ "slug": "description", "label": "Description", "type": "text" },
+				{ "slug": "icon", "label": "Icon", "type": "string" },
+				{ "slug": "label", "label": "Label", "type": "string" },
+				{ "slug": "display_order", "label": "Display Order", "type": "integer" }
+			]
+		},
 		{
 			"slug": "posts",
 			"label": "Posts",
@@ -20,50 +83,13 @@
 			"supports": ["drafts", "revisions", "search", "seo"],
 			"commentsEnabled": true,
 			"fields": [
-				{
-					"slug": "title",
-					"label": "Title",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "featured_image",
-					"label": "Featured Image",
-					"type": "image"
-				},
-				{
-					"slug": "content",
-					"label": "Content",
-					"type": "portableText",
-					"searchable": true
-				},
-				{
-					"slug": "excerpt",
-					"label": "Excerpt",
-					"type": "text"
-				}
-			]
-		},
-		{
-			"slug": "pages",
-			"label": "Pages",
-			"labelSingular": "Page",
-			"supports": ["drafts", "revisions", "search"],
-			"fields": [
-				{
-					"slug": "title",
-					"label": "Title",
-					"type": "string",
-					"required": true,
-					"searchable": true
-				},
-				{
-					"slug": "content",
-					"label": "Content",
-					"type": "portableText",
-					"searchable": true
-				}
+				{ "slug": "title", "label": "Title", "type": "string", "required": true, "searchable": true },
+				{ "slug": "featured_image", "label": "Featured Image", "type": "image" },
+				{ "slug": "content", "label": "Content", "type": "portableText", "searchable": true },
+				{ "slug": "excerpt", "label": "Excerpt", "type": "text" },
+				{ "slug": "read_time", "label": "Read Time", "type": "string" },
+				{ "slug": "featured", "label": "Featured", "type": "boolean" },
+				{ "slug": "display_order", "label": "Display Order", "type": "integer" }
 			]
 		}
 	],
@@ -76,9 +102,12 @@
 			"hierarchical": true,
 			"collections": ["posts"],
 			"terms": [
-				{ "slug": "development", "label": "Development" },
-				{ "slug": "design", "label": "Design" },
-				{ "slug": "notes", "label": "Notes" }
+				{ "slug": "featured-guide", "label": "Featured Guide" },
+				{ "slug": "market-insights", "label": "Market Insights" },
+				{ "slug": "strategy", "label": "Strategy" },
+				{ "slug": "agency-reviews", "label": "Agency Reviews" },
+				{ "slug": "ai-optimization", "label": "AI Optimization" },
+				{ "slug": "industry-news", "label": "Industry News" }
 			]
 		},
 		{
@@ -88,25 +117,13 @@
 			"hierarchical": false,
 			"collections": ["posts"],
 			"terms": [
-				{ "slug": "webdev", "label": "Web Development" },
-				{ "slug": "opinion", "label": "Opinion" },
-				{ "slug": "tools", "label": "Tools" },
-				{ "slug": "creativity", "label": "Creativity" }
+				{ "slug": "geo", "label": "GEO" },
+				{ "slug": "llm", "label": "LLM" },
+				{ "slug": "seo", "label": "SEO" },
+				{ "slug": "ai", "label": "AI" },
+				{ "slug": "pricing", "label": "Pricing" },
+				{ "slug": "content-strategy", "label": "Content Strategy" }
 			]
-		}
-	],
-
-	"bylines": [
-		{
-			"id": "byline-editorial",
-			"slug": "emdash-editorial",
-			"displayName": "EmDash Editorial"
-		},
-		{
-			"id": "byline-guest",
-			"slug": "guest-contributor",
-			"displayName": "Guest Contributor",
-			"isGuest": true
 		}
 	],
 
@@ -115,58 +132,19 @@
 			"name": "primary",
 			"label": "Primary Navigation",
 			"items": [
-				{ "type": "custom", "label": "Home", "url": "/" },
-				{ "type": "custom", "label": "About", "url": "/pages/about" },
-				{ "type": "custom", "label": "Posts", "url": "/posts" }
+				{ "type": "custom", "label": "Agencies", "url": "/" },
+				{ "type": "custom", "label": "AI Optimization", "url": "/ai-optimization" },
+				{ "type": "custom", "label": "SEO Basics", "url": "/seo-agencies" },
+				{ "type": "custom", "label": "Blog", "url": "/blog" }
 			]
 		}
 	],
 
 	"widgetAreas": [
 		{
-			"name": "sidebar",
-			"label": "Sidebar",
-			"description": "Widget area displayed on single post pages",
-			"widgets": [
-				{
-					"type": "component",
-					"componentId": "core:search",
-					"title": "Search"
-				},
-				{
-					"type": "component",
-					"componentId": "core:categories",
-					"title": "Categories"
-				},
-				{
-					"type": "component",
-					"componentId": "core:tags",
-					"title": "Tags"
-				},
-				{
-					"type": "component",
-					"componentId": "core:recent-posts",
-					"title": "Recent Posts",
-					"settings": {
-						"count": 5,
-						"showDate": true
-					}
-				},
-				{
-					"type": "component",
-					"componentId": "core:archives",
-					"title": "Archives",
-					"settings": {
-						"type": "monthly",
-						"limit": 6
-					}
-				}
-			]
-		},
-		{
 			"name": "footer",
 			"label": "Footer",
-			"description": "Widget area displayed in the site footer",
+			"description": "Footer widget area",
 			"widgets": [
 				{
 					"type": "content",
@@ -178,7 +156,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "A blog about software, design, and the occasional stray thought."
+									"text": "Curating the world's most sophisticated digital search partners for the intelligence era."
 								}
 							]
 						}
@@ -192,14 +170,14 @@
 		{
 			"slug": "newsletter-signup",
 			"title": "Newsletter Signup",
-			"description": "A call-to-action block for newsletter subscriptions",
+			"description": "A call-to-action for newsletter subscriptions",
 			"keywords": ["newsletter", "subscribe", "email", "cta"],
 			"source": "theme",
 			"content": [
 				{
 					"_type": "block",
 					"style": "h3",
-					"children": [{ "_type": "span", "text": "Stay in the loop" }]
+					"children": [{ "_type": "span", "text": "Stay ahead of the Algorithm." }]
 				},
 				{
 					"_type": "block",
@@ -207,26 +185,7 @@
 					"children": [
 						{
 							"_type": "span",
-							"text": "Get notified when new posts are published. No spam, unsubscribe anytime."
-						}
-					]
-				}
-			]
-		},
-		{
-			"slug": "about-author",
-			"title": "About the Author",
-			"description": "Brief author bio for use in posts or pages",
-			"keywords": ["author", "bio", "about"],
-			"source": "theme",
-			"content": [
-				{
-					"_type": "block",
-					"style": "normal",
-					"children": [
-						{
-							"_type": "span",
-							"text": "A software developer who writes about building things on the web. Based somewhere with good coffee and reliable internet."
+							"text": "Get the weekly memo on SEO shifts and AI integration directly from our research team."
 						}
 					]
 				}
@@ -234,543 +193,513 @@
 		}
 	],
 
+	"bylines": [
+		{
+			"id": "byline-editorial",
+			"slug": "findanseoagency-editorial",
+			"displayName": "FindAnSEOAgency Editorial"
+		},
+		{
+			"id": "byline-guest",
+			"slug": "guest-contributor",
+			"displayName": "Guest Contributor",
+			"isGuest": true
+		}
+	],
+
 	"content": {
 		"pages": [
 			{
-				"id": "about",
-				"slug": "about",
+				"id": "home",
+				"slug": "home",
 				"status": "published",
 				"data": {
-					"title": "About",
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "A place for writing about software, design, and the occasional stray thought. No posting schedule, no newsletter funnel. Just things I wanted to write down."
-								}
+					"title": "Home",
+					"hero_eyebrow": "The Technical Curator",
+					"hero_title": "Find Your Next SEO Partner for the",
+					"hero_highlight": "AI Era",
+					"hero_description": "The definitive directory for performance-driven SEO agencies. We vet the experts specializing in LLM optimization, semantic search, and predictive analytics.",
+					"hero_primary_btn_text": "Search Agencies",
+					"hero_primary_btn_link": "/",
+					"hero_secondary_btn_text": "How It Works",
+					"hero_secondary_btn_link": "#how-it-works",
+					"sections": {
+						"howItWorks": [
+							{ "step": "01", "title": "Define Your Needs", "description": "Tell us about your industry, current SEO status, and specific AI integration goals for your organic search strategy." },
+							{ "step": "02", "title": "Browse Top Agencies", "description": "Access our hand-picked list of elite agencies. Each profile includes case studies focused on modern search algorithms." },
+							{ "step": "03", "title": "Connect & Optimize", "description": "Request introductions directly. Start building an SEO roadmap designed for the next generation of search engines." }
+						],
+						"eventCard": {
+							"label": "UPCOMING EVENT",
+							"title": "The Future of E-E-A-T in 2024",
+							"date": "AUG 24, 2024"
+						},
+						"joinCard": {
+							"title": "Ready to transform your search visibility?",
+							"buttonText": "Join the Directory"
+						},
+						"footerColumns": [
+							{
+								"title": "Directory",
+								"links": [
+									{ "label": "Top Agencies", "href": "/" },
+									{ "label": "Pricing Models", "href": "/seo-agencies" },
+									{ "label": "Case Studies", "href": "#" },
+									{ "label": "Reviews", "href": "#" }
+								]
+							},
+							{
+								"title": "Knowledge",
+								"links": [
+									{ "label": "AI Optimization", "href": "/ai-optimization" },
+									{ "label": "Search Trends", "href": "#" },
+									{ "label": "SEO Basics", "href": "/seo-agencies" },
+									{ "label": "Webinars", "href": "#" }
+								]
+							},
+							{
+								"title": "Company",
+								"links": [
+									{ "label": "About Us", "href": "#" },
+									{ "label": "Contact", "href": "#" },
+									{ "label": "Privacy", "href": "#" },
+									{ "label": "Terms", "href": "#" }
+								]
+							}
+						]
+					},
+					"cta_title": "The future of SEO isn't human-only. It's augmented.",
+					"cta_description": "Join 50,000+ marketing leaders getting the latest on AI search shifts and agency insights delivered weekly.",
+					"cta_btn_text": "Subscribe",
+					"cta_style": "newsletter",
+					"seo_title": "FindAnSEOAgency | Find Your Next SEO Partner for the AI Era",
+					"seo_description": "The definitive directory for performance-driven SEO agencies specializing in AI optimization.",
+					"content": []
+				}
+			},
+			{
+				"id": "ai-optimization",
+				"slug": "ai-optimization",
+				"status": "published",
+				"data": {
+					"title": "AI Search Optimization",
+					"hero_eyebrow": "The Future of Search",
+					"hero_title": "Master AI Search Optimization",
+					"hero_highlight": "(GEO)",
+					"hero_description": "The future of SEO is generative. Learn how to optimize for LLMs like ChatGPT, Claude, and Gemini to ensure your brand remains visible in the age of AI.",
+					"hero_primary_btn_text": "Download GEO Guide",
+					"hero_primary_btn_link": "#",
+					"hero_secondary_btn_text": "Explore Agencies",
+					"hero_secondary_btn_link": "/",
+					"hero_stat_label": "LLM Reach",
+					"hero_stat_value": "+142%",
+					"hero_stat_description": "Increased visibility in Gemini responses",
+					"sections": {
+						"whatIsGeo": {
+							"title": "What is GEO?",
+							"description": "Generative Engine Optimization (GEO) is the evolution of traditional search engine optimization. It focuses on how Large Language Models (LLMs) synthesize and present information to users.",
+							"detail": "Unlike classic SEO which targets ranked lists, GEO targets citations and contextual inclusion. We help you transition from ranking for keywords to becoming the definitive source for AI recommendation engines.",
+							"imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCaerD8X0QsiryX8kwcG3JoX6Rwvf643O8XHwZ8msfZ2QQg_ggd6rF2kO5BsRPggK_Xpv90t25MHkGxmF6FU_ASnhtHIJuNxGJzJJxvJGJEzWowWVIMF6zoZnJrhbsLBivFYHXT7r3XVtnmr5Ow56mdzBb5HUUbuGhJAXx8KaOu-ZyYIVCikANVDp-hjKxGC0iTHtiavhzqRh8fLsi2ljhQZGIvwnF6o3u20cIrjGjz9BRbPq18GvfKja6XG1LyAnmXRUviKS46n98",
+							"features": [
+								{ "title": "Citation Engineering", "description": "Structured data that LLMs can easily parse and credit." },
+								{ "title": "Semantic Weighting", "description": "Positioning your content as a high-authority node in vector space." }
 							]
 						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Built with Astro and EmDash. The source is open if you want to see how it works."
-								}
+						"expertise": [
+							{ "title": "AI-First Strategy", "description": "Comprehensive audits of how LLMs currently perceive your brand and a roadmap to improve generative visibility across all major models.", "features": ["LLM Sentiment Audits", "Prompt Sensitivity Testing"] },
+							{ "title": "LLM Engines", "description": "Optimizing recommendation engines within ChatGPT and Claude to prioritize your services." },
+							{ "title": "Semantic Indexing", "description": "Aligning your website's knowledge graph with the high-dimensional vector space of generative engines." },
+							{ "title": "Real-time LLM Monitoring", "description": "Track your brand's share-of-voice in generative search results with our proprietary GEO dashboard." }
+						],
+						"guides": [
+							{ "number": "01", "title": "The GEO Playbook: Citations in 2024", "description": "Mastering the art of appearing in ChatGPT's \"Sources\" footer.", "readTime": "5 min read" },
+							{ "number": "02", "title": "LLM Branding: Establishing Truth", "description": "How to correct misinformation about your brand in Gemini & Claude.", "readTime": "8 min read" },
+							{ "number": "03", "title": "Vector Search and Your Content Strategy", "description": "Moving from keyword strings to high-dimensional intent.", "readTime": "12 min read" }
+						]
+					},
+					"cta_title": "Ready to Audit Your AI Presence?",
+					"cta_description": "Connect with one of our specialized GEO agencies today and secure your spot in the future of search.",
+					"cta_btn_text": "Find a GEO Agency Now",
+					"cta_btn_link": "/",
+					"cta_style": "dark",
+					"seo_title": "AI Search Optimization Hub | FindAnSEOAgency",
+					"seo_description": "Master Generative Engine Optimization (GEO) and optimize for LLMs like ChatGPT, Claude, and Gemini.",
+					"content": []
+				}
+			},
+			{
+				"id": "seo-agencies",
+				"slug": "seo-agencies",
+				"status": "published",
+				"data": {
+					"title": "Finding an SEO Agency",
+					"hero_eyebrow": "Expert Navigation",
+					"hero_title": "Your Path to the Right",
+					"hero_highlight": "SEO Partner",
+					"hero_description": "Comprehensive resources to help you evaluate, select, and work with top-tier SEO agencies. We bridge the gap between complex data and business growth.",
+					"hero_primary_btn_text": "Browse Top Rated",
+					"hero_primary_btn_link": "/",
+					"hero_secondary_btn_text": "Download Guide",
+					"hero_secondary_btn_link": "#",
+					"sections": {
+						"evaluationCriteria": {
+							"sectionLabel": "Selection Framework",
+							"sectionTitle": "Agency Evaluation Criteria",
+							"sectionDescription": "Our data-driven checklist ensures you skip the fluff and find partners that deliver measurable ROI.",
+							"mainCard": {
+								"title": "Technical Proficiency Audit",
+								"description": "Evaluate an agency's ability to handle complex site architectures, Core Web Vitals, and semantic schema markup.",
+								"checklist": ["Backlink Profile Integrity", "Content Strategy Depth", "Page Speed Optimization", "Mobile-First Readiness"]
+							},
+							"roiCard": {
+								"title": "ROI Modeling",
+								"description": "Top agencies don't just report rankings; they forecast revenue and lead generation metrics.",
+								"buttonText": "View Calculator"
+							},
+							"smallCards": [
+								{ "title": "Transparency & Ethics", "description": "Ensure the agency follows White-Hat guidelines and provides full visibility into their process." },
+								{ "title": "Reporting Frequency", "description": "Dedicated account managers and real-time dashboarding should be standard, not an extra." },
+								{ "title": "Proven Track Record", "description": "Case studies should demonstrate long-term retention and historical performance in your niche." }
+							]
+						},
+						"pricing": {
+							"title": "SEO Pricing Breakdown:",
+							"highlight": "What Should You Pay?",
+							"description": "The cost of SEO can vary from $500 to $50,000 per month. Our comprehensive guide deconstructs the pricing models\u2014hourly, retainer, and project-based\u2014to ensure you're getting fair market value.",
+							"items": [
+								{ "text": "Monthly Retainers: $2,500 - $10k+" },
+								{ "text": "Project-Based: $5k - $25k" }
+							],
+							"buttonText": "Full Pricing Guide",
+							"stats": [
+								{ "label": "Average ROI", "value": "320%" },
+								{ "label": "Payback Period", "value": "6 Mo" }
 							]
 						}
-					]
+					},
+					"seo_title": "FindAnSEOAgency | Your Path to the Right SEO Partner",
+					"seo_description": "Comprehensive resources to help you evaluate, select, and work with top-tier SEO agencies.",
+					"content": []
+				}
+			},
+			{
+				"id": "blog",
+				"slug": "blog",
+				"status": "published",
+				"data": {
+					"title": "Blog",
+					"hero_eyebrow": "Editorial Intelligence",
+					"hero_title": "Deep Dives into",
+					"hero_highlight": "SEO & AI",
+					"hero_description": "Analyzing the intersection of generative search, technical optimization, and high-performance agency partnerships.",
+					"sections": {
+						"categories": ["All Insights", "AI Optimization", "SEO Basics", "Agency Reviews", "Industry News"]
+					},
+					"seo_title": "Blog | FindAnSEOAgency",
+					"seo_description": "Deep dives into SEO and AI \u2014 analyzing generative search, technical optimization, and agency partnerships.",
+					"content": []
+				}
+			}
+		],
+		"agencies": [
+			{
+				"id": "tj-digital",
+				"slug": "tj-digital",
+				"status": "published",
+				"data": {
+					"title": "TJ Digital",
+					"description": "Founded by TJ Robertson, a Las Vegas-based SEO veteran with 15 years of experience. TJ Digital specializes in AI-driven search strategy, LLM optimization, and predictive analytics for enterprise brands.",
+					"rating": 5.0,
+					"badge": "Premier Agency",
+					"badge_style": "premier",
+					"icon": "auto_awesome",
+					"logo_image": {
+						"$media": {
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuArieJfXqX0ojywJyced16HxbUpsooBgN8smckBqGxuayRaTgut65VjjxfkwqlTlMWfMNsjyiJxfaD1dHGeDR_cacGs8wC9UuO4NUc71_1DVMykSdbZYLjED5edckOenZu71qC_FRsq9m1ajKQC4gCdehRk9SQCkE8KxsMjSBi1oPrziO-3QBR-dxraTYTTp6GM7n6oTr0kvzvHut_m_JSf7aJKahwiwqfrsHsyJA62dtM0Qsq2pMscnlJWz_CNiR-HtmEAoN9Q-JE",
+							"alt": "TJ Digital logo",
+							"filename": "tj-digital-logo.jpg"
+						}
+					},
+					"hero_image": {
+						"$media": {
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBWrP4s_3Ta_-xElz3_AxyBzIMyYmGNiE3XY-aGmSLcxQsZaxplT3GsP6zu0ry1jnc4bYaf7zv7Cwoe2tsTj026MMW4H16ZjGGTBoUWNQl7B5Y_CTX3z0SBUG6mcRB8_hQ782q70G2TwwQC_DqwLZsM93VCIKo9Y7EkBpALixMbMgRpHyPIFD1XZ66nEg_ssF1bbWRe_MvGpEw40L6do-h5LPFDVVjAIXDgQoZlwFmne1wSSsnuDl_96HDWfojEh3WK00ERa8K6pJY",
+							"alt": "TJ Digital office",
+							"filename": "tj-digital-hero.jpg"
+						}
+					},
+					"retention_rate": "98% Client Retention",
+					"cta_text": "View Full Case Study",
+					"featured": true,
+					"display_order": 1
+				}
+			},
+			{
+				"id": "vortex-seo-lab",
+				"slug": "vortex-seo-lab",
+				"status": "published",
+				"data": {
+					"title": "Vortex SEO Lab",
+					"description": "Specializing in Enterprise E-commerce and technical architecture audits for global brands.",
+					"rating": 4.9,
+					"badge": "Premium",
+					"badge_style": "premium",
+					"icon": "rocket_launch",
+					"featured": false,
+					"display_order": 2
+				}
+			},
+			{
+				"id": "summit-digital",
+				"slug": "summit-digital",
+				"status": "published",
+				"data": {
+					"title": "Summit Digital",
+					"description": "Award-winning content strategy and semantic SEO for high-growth SaaS and Tech firms.",
+					"rating": 5.0,
+					"badge": "Niche Expert",
+					"badge_style": "niche",
+					"icon": "hub",
+					"featured": false,
+					"display_order": 3
+				}
+			},
+			{
+				"id": "metric-bloom",
+				"slug": "metric-bloom",
+				"status": "published",
+				"data": {
+					"title": "Metric Bloom",
+					"description": "Combining AI-driven keyword research with traditional PR for authoritative link building.",
+					"rating": 4.8,
+					"badge": "Data Driven",
+					"badge_style": "data-driven",
+					"icon": "query_stats",
+					"featured": false,
+					"display_order": 4
+				}
+			}
+		],
+		"service_categories": [
+			{
+				"id": "ai-content-strategy",
+				"slug": "ai-content-strategy",
+				"status": "published",
+				"data": {
+					"title": "AI-Powered Content Strategy",
+					"description": "Leveraging generative models to create authoritative, human-centric content at scale.",
+					"icon": "auto_awesome",
+					"label": "DATA-FIRST CONTENT",
+					"display_order": 1
+				}
+			},
+			{
+				"id": "llm-training",
+				"slug": "llm-training",
+				"status": "published",
+				"data": {
+					"title": "LLM Training & Fine-Tuning",
+					"description": "Ensuring your brand data is accurately represented in Large Language Model results.",
+					"icon": "model_training",
+					"label": "MODEL OPTIMIZATION",
+					"display_order": 2
+				}
+			},
+			{
+				"id": "semantic-search",
+				"slug": "semantic-search",
+				"status": "published",
+				"data": {
+					"title": "Semantic Search Integration",
+					"description": "Mapping entity relationships to dominate knowledge graph placements and rich snippets.",
+					"icon": "hub",
+					"label": "GRAPH STRUCTURE",
+					"display_order": 3
+				}
+			},
+			{
+				"id": "predictive-analytics",
+				"slug": "predictive-analytics",
+				"status": "published",
+				"data": {
+					"title": "Predictive SEO Analytics",
+					"description": "Using machine learning to forecast algorithmic shifts and adjust strategy in real-time.",
+					"icon": "query_stats",
+					"label": "ML FORECASTING",
+					"display_order": 4
 				}
 			}
 		],
 		"posts": [
 			{
-				"id": "post-1",
-				"slug": "building-for-the-long-term",
+				"id": "what-is-geo",
+				"slug": "what-is-geo-complete-guide",
 				"status": "published",
 				"data": {
-					"title": "Building for the Long Term",
-					"excerpt": "The frameworks will change. The databases will change. What survives is the clarity of your thinking.",
+					"title": "What is GEO? A Complete Guide to Generative Engine Optimization",
+					"excerpt": "Traditional SEO is evolving. Learn how to optimize your brand for AI-driven answers in ChatGPT, Perplexity, and Google Gemini.",
+					"read_time": "12 Min Read",
+					"featured": true,
+					"display_order": 1,
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=1200&h=800&fit=crop",
-							"alt": "Code on a monitor in a dark room",
-							"filename": "building-long-term.jpg"
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuC-ajd6QMKyVbZTepTWxxYw8XQxNRlhXksCKTjaPZmvR_nflONjbECqYtgzsrE4t2uQJBYx9FfifPrCsfj3eHGvCFxxloBJQdiUumeQM1v9gcQudKSBAQX_uvoQO7j-0zP9VBRstpv_9jxiOx1VzfRJ8OEwyYTKUFnDDUCV41EXbaDlx3NjKGIVCZTRwrnvrhAr6v9nmJ-sURxB7vHbV4h14Pgh0SPiNlcwBhVuE2lfL2Gr6RebOToH241Ia9NpNM-d3l5Bw5lIvQg",
+							"alt": "What is GEO guide",
+							"filename": "geo-guide.jpg"
 						}
 					},
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Every few years the industry collectively decides that everything we've been doing is wrong and there's a better way. New frameworks, new paradigms, new build tools. The churn is relentless, and if you're not careful, you spend more time migrating than building."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "I've been writing software long enough to have seen several of these cycles. jQuery to Backbone to Angular to React to whatever comes next. Each transition felt urgent at the time. Looking back, the things that actually mattered were rarely about the framework."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "What survives" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Clean data models survive. Clear boundaries between systems survive. Good naming survives. The decision to keep things simple when you could have made them clever - that definitely survives."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "What doesn't survive is code that was written to impress, abstractions built for problems that never materialized, and architectures designed around a framework's opinions rather than the domain's reality."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The best code I've written is boring. It reads like prose, does one thing well, and doesn't require a PhD in category theory to understand. The worst code I've written was technically impressive at the time."
-								}
-							]
-						}
-					]
-				},
-				"bylines": [
-					{ "byline": "byline-editorial" },
-					{ "byline": "byline-guest", "roleLabel": "Guest essay" }
-				],
-				"taxonomies": {
-					"category": ["development"],
-					"tag": ["opinion"]
-				}
-			},
-			{
-				"id": "post-2",
-				"slug": "the-case-for-static",
-				"status": "published",
-				"data": {
-					"title": "The Case for Static",
-					"excerpt": "Static sites aren't a step backwards. They're what you get when you take performance and simplicity seriously.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=800&fit=crop",
-							"alt": "Laptop and coffee on a wooden table",
-							"filename": "case-for-static.jpg"
-						}
-					},
-					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "There's a certain irony in the fact that the web started static, went dynamic, and is now swinging back toward static again. But the static sites of today aren't the hand-coded HTML pages of 1998. They're generated, optimized, and deployed to edge networks that serve them in milliseconds."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The pitch for server-rendered everything was compelling: dynamic content, personalization, real-time data. But most sites don't need most of that most of the time. A blog post doesn't need to be rendered on every request. A product page doesn't change every second."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "The performance argument" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "A static file served from a CDN is as fast as the web gets. No cold starts, no database queries, no server-side rendering overhead. The Time to First Byte is essentially the network latency to your nearest edge node. You can't beat physics."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "And when you do need dynamic behavior, you can add it surgically. An island of interactivity in a sea of static HTML. The best of both worlds, without paying the cost of either at all times."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Traditional SEO is evolving. As AI-powered search engines like ChatGPT, Perplexity, and Google Gemini become primary information sources, brands need a new optimization strategy." }] },
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "What is Generative Engine Optimization?" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Generative Engine Optimization (GEO) is the practice of optimizing your brand's digital presence to be accurately represented and recommended by Large Language Models. Unlike traditional SEO which focuses on ranking in search result pages, GEO focuses on being cited and referenced in AI-generated responses." }] },
+						{ "_type": "block", "style": "h2", "children": [{ "_type": "span", "text": "Why GEO Matters Now" }] },
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "With over 100 million weekly active users on ChatGPT alone, AI search is no longer a niche channel. Brands that fail to optimize for generative engines risk becoming invisible to a rapidly growing segment of searchers." }] }
 					]
 				},
 				"bylines": [{ "byline": "byline-editorial" }],
 				"taxonomies": {
-					"category": ["development"],
-					"tag": ["webdev", "opinion"]
+					"category": ["featured-guide"],
+					"tag": ["geo", "ai"]
 				}
 			},
 			{
-				"id": "post-3",
-				"slug": "learning-in-public",
+				"id": "seo-cost-guide",
+				"slug": "seo-cost-2024-pricing-guide",
 				"status": "published",
 				"data": {
-					"title": "Learning in Public",
-					"excerpt": "Writing about what you're learning is the fastest way to find out what you don't actually understand.",
+					"title": "How Much Does SEO Cost? 2024 Pricing Guide for Mid-Market Brands",
+					"excerpt": "A detailed breakdown of monthly retainers, project-based fees, and what you should expect to pay for top-tier SEO performance.",
+					"read_time": "5 min read",
+					"featured": false,
+					"display_order": 2,
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&h=800&fit=crop",
-							"alt": "Notebook and pen on a desk",
-							"filename": "learning-in-public.jpg"
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBq42o-8YXhd-nWWOeNfVRr0eIkkzs3Yv7VMUn_jhaycbeineCS4bpxBY8oM24-GTnrzWNsWZC7PAZ9ZHSSrq4f4zGhmw3jUtPB8H3Fy_XCKGd4I1tMrKwbp5Ic6Jvvhqepi6PCKHTDNMAeVx-sQBqKOHfPy-2GT9-IWysd6JpTPFEwlh2_7M6XH3x2-IUYnwJF1u4P3MgWvCevNhMU0ngeA8aUqZAgGEvUOTGcFQm71RF9brNsN3NSdxVpknZt5zaV3owzYchU8uk",
+							"alt": "SEO pricing guide",
+							"filename": "seo-pricing.jpg"
 						}
 					},
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "I started writing about things I was learning not because I had anything original to say, but because I kept forgetting what I'd figured out. The blog posts were notes to my future self, published publicly more out of laziness than courage."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "What I didn't expect was how much the writing itself would accelerate the learning. There's a particular kind of clarity that comes from trying to explain something to someone else. The gaps in your understanding, which you can happily ignore when the knowledge lives only in your head, become painfully obvious when you try to put it into sentences."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "The fear of being wrong" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The biggest barrier isn't time or writing skill. It's the fear of publishing something that turns out to be wrong. But here's the thing: being wrong publicly is one of the most efficient ways to learn. Someone will correct you, often kindly, and you'll remember that correction forever."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The posts that helped me most weren't written by experts. They were written by people one step ahead of me on the same path, in language that hadn't yet been polished into abstraction. There's a place for that kind of writing, and it's more valuable than most people realize."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Understanding SEO pricing is crucial for making informed investment decisions. This guide breaks down the most common pricing models and what you should expect at each level." }] }
 					]
 				},
+				"bylines": [{ "byline": "byline-editorial" }],
 				"taxonomies": {
-					"category": ["notes"],
-					"tag": ["opinion"]
+					"category": ["market-insights"],
+					"tag": ["seo", "pricing"]
 				}
 			},
 			{
-				"id": "post-4",
-				"slug": "small-tools-big-impact",
+				"id": "seo-vs-geo",
+				"slug": "seo-vs-geo-dual-strategy-2025",
 				"status": "published",
 				"data": {
-					"title": "Small Tools, Big Impact",
-					"excerpt": "The best developer tools do one thing well and get out of your way. A love letter to focused software.",
+					"title": "SEO vs. GEO: Why You Need a Dual Strategy for 2025",
+					"excerpt": "Understanding the fundamental differences between ranking for search engines and ranking for large language models.",
+					"read_time": "8 min read",
+					"featured": false,
+					"display_order": 3,
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1575026615908-666710ae5e47?w=1200&h=800&fit=crop",
-							"alt": "Wrenches and hand tools hanging on a workshop wall",
-							"filename": "small-tools.jpg"
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuAoOr6UMhtnPPwwCK05gXzjFq6z1lSX42tU08NcVBXiBnHO3mfvgalRDcctPzaW99C99dkC6OUuS1w44vwS_A9VIeEG-B1XjnXeGsFiUvawYcKEg-TqXyw6KobUzkOjIOssm3AUjU77-ALkqhf96V5PPWBEmBtwG_5nQ9i9nxK1m3vPzgLD3Zfucf9cQAKDGtqJLMYC7gRvyukeMyAb0PPedlOeO_cPW34aP_vqbTuwl6s0ZeKo2qvU4i5zZX0RuFvTagRKpzAPrRY",
+							"alt": "SEO vs GEO strategy",
+							"filename": "seo-vs-geo.jpg"
 						}
 					},
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "There's a class of software that doesn't get enough appreciation. Not the frameworks or the platforms or the IDEs, but the small, sharp tools that solve one problem so well you stop thinking about them. They become invisible, which is the highest compliment you can pay a tool."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "I'm talking about things like ripgrep, which searches code so fast it changed how I think about searching. Or jq, which makes JSON feel like a first-class data format in the terminal. Or curl, which has been quietly powering the internet's plumbing for decades."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "The Unix philosophy, revisited" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Do one thing well. The advice is old enough to be a cliche, but the best modern tools still follow it. They don't try to be platforms. They don't have plugin ecosystems or configuration languages or startup wizards. They do their job and they compose with other tools that do theirs."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The temptation is always to add more. One more feature, one more option, one more integration. But every addition is a decision someone has to make, a path through the code that has to be maintained, a thing that can break. The best tools resist this. They stay small, and in staying small, they stay reliable."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The search landscape is bifurcating. Traditional search engines and generative AI engines operate on fundamentally different principles, and your optimization strategy needs to account for both." }] }
 					]
 				},
+				"bylines": [{ "byline": "byline-editorial" }],
 				"taxonomies": {
-					"category": ["development"],
-					"tag": ["tools"]
+					"category": ["strategy"],
+					"tag": ["seo", "geo"]
 				}
 			},
 			{
-				"id": "post-5",
-				"slug": "designing-with-constraints",
+				"id": "seo-without-agency",
+				"slug": "seo-without-agency-in-house",
 				"status": "published",
 				"data": {
-					"title": "Designing with Constraints",
-					"excerpt": "Limitations aren't obstacles to creativity. They're the structure that makes creativity possible.",
+					"title": "Can You Do SEO Without an Agency? The In-House Reality Check",
+					"excerpt": "Evaluating the resources, technology stack, and talent required to run a successful internal SEO program versus outsourcing.",
+					"read_time": "12 min read",
+					"featured": false,
+					"display_order": 4,
 					"featured_image": {
 						"$media": {
-							"url": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=1200&h=800&fit=crop",
-							"alt": "Pencils and design tools on a desk",
-							"filename": "designing-with-constraints.jpg"
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuClb51AeqRMOZT33LqRgVh1lipDx4wwvQJph9Z0GQmJ6dx2McKDrb7UHBq9iqoqEkSl9_MDcuaq5ZimULx6w_UEh2b7o4EdiHDWVQUQRz3wy5lanbxkRMvcuCDJOqM3ZLTsUIj1XCZDXikd7h8K3lUS38-J0Qpf4zf90YfoR5Pubc4Tmx4qzCcQJo_nJPS528EXRk21_62YBN4raqrsTmTBhf6XVbDoVlfx8x9zcShQkzukBTJpABl6SKbBkH5IZ9oQnhhy3ve6WHo",
+							"alt": "In-house SEO",
+							"filename": "seo-in-house.jpg"
 						}
 					},
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Give a designer a blank canvas and unlimited time, and they'll often produce something mediocre. Give them a tight brief, a small screen, and a deadline, and they'll surprise you. This isn't a paradox - it's how creativity actually works."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Constraints force decisions. When you can't use more than two typefaces, you have to choose carefully. When the page has to load in under a second, every element earns its place. When the interface has to work on a 320px screen, you discover what's truly essential."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "Embracing the box" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The web itself is a constraint. HTML flows in one direction. CSS has a box model. Browsers have viewport sizes and font rendering quirks. You can fight these constraints or you can work with them, and the results are dramatically different."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The designs I admire most don't look like they were forced through a framework. They look like they grew naturally from the medium, respecting its grain rather than working against it. That only happens when you treat constraints as creative partners rather than enemies."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The decision between building an in-house SEO team and partnering with an agency is one of the most consequential choices a growing business can make." }] }
 					]
 				},
+				"bylines": [{ "byline": "byline-editorial" }],
 				"taxonomies": {
-					"category": ["design"],
-					"tag": ["creativity"]
+					"category": ["agency-reviews"],
+					"tag": ["seo"]
 				}
 			},
 			{
-				"id": "post-6",
-				"slug": "a-weekend-with-a-side-project",
+				"id": "geo-playbook-citations",
+				"slug": "geo-playbook-citations-2024",
 				"status": "published",
 				"data": {
-					"title": "A Weekend with a Side Project",
-					"excerpt": "No stakeholders, no deadlines, no Jira tickets. Just you and a dumb idea that might turn into something.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=1200&h=800&fit=crop",
-							"alt": "Code on a screen with a dark theme",
-							"filename": "weekend-side-project.jpg"
-						}
-					},
+					"title": "The GEO Playbook: Citations in 2024",
+					"excerpt": "Mastering the art of appearing in ChatGPT's \"Sources\" footer.",
+					"read_time": "5 min read",
+					"featured": false,
+					"display_order": 5,
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Saturday morning. Coffee's made, the house is quiet, and I've got an idea that's been nagging at me all week. Not a good idea, necessarily - just a persistent one. A small tool that does a thing I keep doing manually. How hard could it be?"
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is the best kind of programming. No requirements document, no sprint planning, no pull request reviews. Just a text editor and a problem. The freedom to make terrible architectural decisions, rewrite everything twice, and follow tangents that turn out to be dead ends."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "Why side projects matter" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Side projects are where you learn things your day job would never teach you. Not because the problems are harder, but because you're free to take risks. Try a language you've never used. Build something without a framework. Deploy to a platform you've only read about. The stakes are zero, which makes the learning maximum."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "By Sunday evening, the thing sort of works. It's rough, the error handling is nonexistent, and the README is a single sentence. But it solves the problem I set out to solve, and I learned three things I didn't know on Friday. Not a bad weekend."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Citations in generative AI responses are the new backlinks. Understanding how to earn them is crucial for modern search visibility." }] }
 					]
 				},
+				"bylines": [{ "byline": "byline-editorial" }],
 				"taxonomies": {
-					"category": ["development"],
-					"tag": ["creativity"]
+					"category": ["ai-optimization"],
+					"tag": ["geo", "ai"]
 				}
 			},
 			{
-				"id": "post-7",
-				"slug": "notes-on-simplicity",
+				"id": "llm-branding",
+				"slug": "llm-branding-establishing-truth",
 				"status": "published",
 				"data": {
-					"title": "Notes on Simplicity",
-					"excerpt": "Simplicity isn't the absence of complexity. It's the result of understanding a problem well enough to solve it cleanly.",
-					"featured_image": {
-						"$media": {
-							"url": "https://images.unsplash.com/photo-1559051668-e1fa58f25786?w=1200&h=800&fit=crop",
-							"alt": "Geometric pattern carved into white paper",
-							"filename": "notes-on-simplicity.jpg"
-						}
-					},
+					"title": "LLM Branding: Establishing Truth",
+					"excerpt": "How to correct misinformation about your brand in Gemini & Claude.",
+					"read_time": "8 min read",
+					"featured": false,
+					"display_order": 6,
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Every piece of software starts simple. A few files, a clear purpose, a small surface area. Then features get added, edge cases get handled, and before long you're looking at something that requires a diagram to understand. This isn't inevitable, but it takes discipline to prevent."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The hard part of simplicity isn't the initial design. It's the ongoing resistance to complication. Every feature request, every bug fix, every refactor is an opportunity to add complexity. Saying no is the most important design skill, and the least celebrated."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "h2",
-							"children": [{ "_type": "span", "text": "Removing as a feature" }]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "The best version of a product often has fewer features than the previous one. Not because features were missing, but because someone had the courage to remove things that weren't earning their keep. Every feature has a cost - in maintenance, in cognitive load, in the weight of the interface."
-								}
-							]
-						},
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "Simplicity is a practice, not a destination. You never arrive at simple. You just keep asking: is this necessary? Could this be clearer? Is there a way to solve this problem by removing something instead of adding something? The answer is yes more often than you'd expect."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Large Language Models can misrepresent your brand. Learn how to establish factual accuracy across AI platforms." }] }
 					]
 				},
+				"bylines": [{ "byline": "byline-editorial" }],
 				"taxonomies": {
-					"category": ["notes"],
-					"tag": ["opinion"]
+					"category": ["ai-optimization"],
+					"tag": ["llm", "ai"]
 				}
 			},
 			{
-				"id": "post-draft",
-				"slug": "work-in-progress",
-				"status": "draft",
+				"id": "vector-search",
+				"slug": "vector-search-content-strategy",
+				"status": "published",
 				"data": {
-					"title": "Work in Progress",
-					"excerpt": "This post is still being written.",
+					"title": "Vector Search and Your Content Strategy",
+					"excerpt": "Moving from keyword strings to high-dimensional intent.",
+					"read_time": "12 min read",
+					"featured": false,
+					"display_order": 7,
 					"content": [
-						{
-							"_type": "block",
-							"style": "normal",
-							"children": [
-								{
-									"_type": "span",
-									"text": "This is a draft post that won't appear in the public listing."
-								}
-							]
-						}
+						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Vector search represents a fundamental shift in how content is discovered and ranked. Understanding high-dimensional intent is key to future-proofing your content strategy." }] }
 					]
+				},
+				"bylines": [{ "byline": "byline-editorial" }],
+				"taxonomies": {
+					"category": ["strategy"],
+					"tag": ["content-strategy", "ai"]
 				}
 			}
 		]

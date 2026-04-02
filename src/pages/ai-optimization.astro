@@ -1,0 +1,180 @@
+---
+import Base from '../layouts/Base.astro';
+import { getEmDashEntry } from 'emdash';
+
+const { entry: page, cacheHint } = await getEmDashEntry('pages', 'ai-optimization');
+Astro.cache.set(cacheHint);
+
+const sections = page?.data?.sections || {};
+---
+
+<Base title={page?.data?.seo_title || 'AI Optimization'} description={page?.data?.seo_description} activeNav="/ai-optimization">
+  <main>
+
+    <!-- ═══════ HERO ═══════ -->
+    <section class="relative min-h-screen flex items-end mesh-dark grain overflow-hidden">
+      <div class="absolute top-[20%] right-[15%] w-72 h-72 bg-orange/6 blur-[120px] rounded-full float pointer-events-none"></div>
+      <div class="absolute bottom-[30%] left-[10%] w-40 h-40 bg-orange/4 blur-[80px] rounded-full float-delayed pointer-events-none"></div>
+
+      <div class="relative z-[3] px-6 md:px-10 pb-16 md:pb-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-end w-full">
+        <div class="lg:col-span-8">
+          {page?.data?.hero_eyebrow && (
+            <span class="section-label text-orange-light mb-4 block">{page.data.hero_eyebrow}</span>
+          )}
+          <h1 class="font-display text-[clamp(2.8rem,7vw,6.5rem)] font-700 tracking-tight leading-[0.9] text-on-dark">
+            {page?.data?.hero_title}<br/>
+            {page?.data?.hero_highlight && (
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange to-orange-light">{page.data.hero_highlight}</span>
+            )}
+          </h1>
+          <p class="text-on-dark-muted text-lg max-w-xl leading-relaxed mt-8">{page?.data?.hero_description}</p>
+          <div class="flex flex-wrap gap-4 mt-10">
+            {page?.data?.hero_primary_btn_text && (
+              <a href={page.data.hero_primary_btn_link || '#'} class="bg-orange hover:bg-orange-dim text-white px-8 py-4 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,95,0,0.3)] no-underline">
+                {page.data.hero_primary_btn_text}
+              </a>
+            )}
+            {page?.data?.hero_secondary_btn_text && (
+              <a href={page.data.hero_secondary_btn_link || '/'} class="bg-white/5 backdrop-blur border border-white/10 text-on-dark px-8 py-4 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 hover:border-orange/30 no-underline">
+                {page.data.hero_secondary_btn_text}
+              </a>
+            )}
+          </div>
+        </div>
+        {page?.data?.hero_stat_value && (
+          <div class="lg:col-span-4 relative">
+            <div class="bg-dark-elevated border border-dark-border rounded-2xl p-8 relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-orange via-orange-light to-transparent"></div>
+              <p class="font-mono text-[10px] tracking-[0.2em] uppercase text-orange mb-2">{page.data.hero_stat_label}</p>
+              <p class="font-display text-5xl font-700 text-on-dark">{page.data.hero_stat_value}</p>
+              <p class="text-sm text-on-dark-muted mt-2 leading-relaxed">{page.data.hero_stat_description}</p>
+            </div>
+          </div>
+        )}
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-cream to-transparent z-[2]"></div>
+    </section>
+
+    <!-- ═══════ WHAT IS GEO ═══════ -->
+    {sections.whatIsGeo && (
+      <section class="relative overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[80vh]">
+          <div class="relative h-[50vh] lg:h-auto overflow-hidden">
+            {sections.whatIsGeo.imageUrl ? (
+              <img alt="What is GEO" class="absolute inset-0 w-full h-full object-cover" src={sections.whatIsGeo.imageUrl} />
+            ) : (
+              <div class="absolute inset-0 bg-dark-surface"></div>
+            )}
+            <div class="absolute inset-0 bg-orange/8 mix-blend-multiply"></div>
+          </div>
+          <div class="relative z-10 px-6 md:px-10 lg:px-16 py-16 md:py-24 flex flex-col justify-center">
+            <span class="section-label mb-4">01 — Understanding GEO</span>
+            <h2 class="font-display text-4xl md:text-5xl font-700 tracking-tight text-dark leading-[0.95]">{sections.whatIsGeo.title}</h2>
+            <p class="text-ink-light text-lg leading-relaxed mt-6">{sections.whatIsGeo.description}</p>
+            <p class="text-ink-light leading-relaxed mt-4">{sections.whatIsGeo.detail}</p>
+            {sections.whatIsGeo.features && (
+              <div class="mt-10 space-y-6">
+                {sections.whatIsGeo.features.map((f: any, i: number) => (
+                  <div class="flex items-start gap-5">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-orange/10 flex items-center justify-center">
+                      <span class="font-mono text-[11px] font-600 text-orange">0{i + 1}</span>
+                    </div>
+                    <div>
+                      <h4 class="font-display font-600 text-lg text-dark">{f.title}</h4>
+                      <p class="text-ink-light text-sm mt-1 leading-relaxed">{f.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ EXPERTISE ═══════ -->
+    {sections.expertise && (
+      <section class="bg-dark text-on-dark py-24 md:py-36 px-6 md:px-10 relative overflow-hidden grain">
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange/5 blur-[200px] rounded-full pointer-events-none"></div>
+        <div class="flex flex-col md:flex-row md:items-end gap-6 mb-20 relative z-[2]">
+          <span class="section-label text-orange-light">02</span>
+          <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9]">Expertise</h2>
+        </div>
+        <div class="relative z-[2] space-y-6">
+          {sections.expertise.map((card: any, i: number) => (
+            <div class={`stack-card bg-dark-elevated border border-dark-border rounded-3xl p-10 md:p-14 relative overflow-hidden ${i === 0 ? 'md:ml-0' : i === 1 ? 'md:ml-16' : i === 2 ? 'md:ml-32' : 'md:ml-12'}`}>
+              <div class="absolute -top-20 -right-20 w-40 h-40 bg-orange/8 blur-[80px] rounded-full pointer-events-none"></div>
+              <div class="relative z-[2] flex flex-col md:flex-row gap-8 md:gap-16">
+                <div class="flex-shrink-0">
+                  <span class="font-display text-6xl md:text-8xl font-700 text-transparent bg-clip-text bg-gradient-to-b from-on-dark-muted to-dark-border leading-none">0{i + 1}</span>
+                </div>
+                <div class="flex-grow">
+                  <h3 class="font-display text-2xl md:text-3xl font-600 mb-4">{card.title}</h3>
+                  <p class="text-on-dark-muted leading-relaxed max-w-lg">{card.description}</p>
+                  {card.features && (
+                    <div class="flex flex-wrap gap-3 mt-6">
+                      {card.features.map((f: string) => (
+                        <span class="font-mono text-[10px] tracking-wider text-orange bg-orange/10 px-3 py-1.5 rounded-full">{f}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ GUIDES ═══════ -->
+    {sections.guides && (
+      <section class="bg-cream-dark py-24 md:py-32 px-6 md:px-10">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div class="flex items-end gap-6">
+            <span class="section-label">03</span>
+            <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight text-dark leading-[0.9]">AI Guides</h2>
+          </div>
+          <a class="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-orange hover:text-orange-dim cursor-pointer transition-colors duration-300 no-underline" href="/blog">
+            View all
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="divide-y divide-warm-gray">
+          {sections.guides.map((guide: any) => (
+            <a href="/blog" class="service-row group py-8 md:py-10 block no-underline">
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-6 md:gap-10">
+                  <span class="font-display text-4xl font-700 text-warm-gray group-hover:text-orange transition-colors duration-400">{guide.number}</span>
+                  <div>
+                    <h4 class="font-display text-xl md:text-2xl font-600 text-dark group-hover:text-orange transition-colors duration-300">{guide.title}</h4>
+                    <p class="text-ink-light text-sm mt-1">{guide.description}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-6">
+                  <span class="font-mono text-[10px] tracking-wider text-ink-muted uppercase">{guide.readTime}</span>
+                  <svg class="text-warm-gray group-hover:text-orange group-hover:translate-x-2 transition-all duration-300" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ═══════ CTA ═══════ -->
+    {page?.data?.cta_title && page.data.cta_style === 'dark' && (
+      <section class="mesh-dark grain relative py-28 md:py-40 px-6 md:px-10 overflow-hidden">
+        <div class="absolute top-1/2 right-[20%] -translate-y-1/2 w-[400px] h-[400px] bg-orange/8 blur-[150px] rounded-full pointer-events-none pulse-glow"></div>
+        <div class="relative z-[3] max-w-3xl">
+          <span class="section-label text-orange-light">04</span>
+          <h2 class="font-display text-5xl md:text-8xl font-700 tracking-tight text-on-dark leading-[0.85] mt-6">{page.data.cta_title}</h2>
+          <p class="text-on-dark-muted text-lg leading-relaxed mt-6 mb-12 max-w-md">{page.data.cta_description}</p>
+          <a href={page.data.cta_btn_link || '/'} class="inline-block bg-orange hover:bg-orange-dim text-white px-10 py-5 rounded-full font-display text-base font-500 cursor-pointer transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,95,0,0.3)] no-underline">
+            {page.data.cta_btn_text}
+          </a>
+        </div>
+      </section>
+    )}
+
+  </main>
+</Base>

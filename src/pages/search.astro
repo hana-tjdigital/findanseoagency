@@ -3,139 +3,71 @@ export const prerender = false;
 
 import { getEmDashCollection } from "emdash";
 import Base from "../layouts/Base.astro";
-import PostCard from "../components/PostCard.astro";
-import { getReadingTime, extractText } from "../utils/reading-time";
+import { extractText } from "../utils/reading-time";
 
 const query = Astro.url.searchParams.get("q")?.trim() || "";
-
 const { entries: allPosts } = await getEmDashCollection("posts");
 
-// Simple search: match query against title, excerpt, and content
 function matchesQuery(post: (typeof allPosts)[0], q: string): boolean {
-	if (!q) return false;
-	const lower = q.toLowerCase();
-	const title = (post.data.title || "").toLowerCase();
-	const excerpt = (post.data.excerpt || "").toLowerCase();
-	// Extract plain text from portable text blocks (avoids matching on _type, _key, etc.)
-	const content = extractText(post.data.content).toLowerCase();
-	return (
-		title.includes(lower) || excerpt.includes(lower) || content.includes(lower)
-	);
+  if (!q) return false;
+  const lower = q.toLowerCase();
+  const title = (post.data.title || "").toLowerCase();
+  const excerpt = (post.data.excerpt || "").toLowerCase();
+  const content = extractText(post.data.content).toLowerCase();
+  return title.includes(lower) || excerpt.includes(lower) || content.includes(lower);
 }
 
 const results = query ? allPosts.filter((p) => matchesQuery(p, query)) : [];
 ---
 
-<Base
-	title={query ? `Search: ${query}` : "Search"}
-	description="Search blog posts"
->
-	<section class="search-page">
-		<h1 class="search-title">Search</h1>
+<Base title={query ? `Search: ${query}` : "Search"} description="Search blog posts">
+  <section class="mesh-dark grain relative min-h-[50vh] flex items-end overflow-hidden">
+    <div class="relative z-[3] px-6 md:px-10 pb-16 md:pb-20 w-full max-w-3xl">
+      <span class="section-label text-orange-light mb-4 block">Find</span>
+      <h1 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9] text-on-dark mb-10">Search</h1>
 
-		<form method="get" action="/search" class="search-form">
-			<input
-				type="search"
-				name="q"
-				value={query}
-				placeholder="Search posts..."
-				class="search-input"
-				autofocus
-			/>
-			<button type="submit" class="search-button">Search</button>
-		</form>
+      <form method="get" action="/search" class="flex items-center bg-white/5 backdrop-blur-xl border border-white/10 rounded-full overflow-hidden hover:border-orange/30 transition-colors duration-500">
+        <input
+          type="search"
+          name="q"
+          value={query}
+          placeholder="Search posts, agencies, guides..."
+          class="flex-grow py-4 px-6 text-sm font-body text-on-dark placeholder:text-on-dark-faint bg-transparent focus:outline-none"
+          autofocus
+        />
+        <button type="submit" class="bg-orange hover:bg-orange-dim text-white m-1.5 px-6 py-3 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 whitespace-nowrap hover:shadow-[0_0_30px_rgba(255,95,0,0.3)]">
+          Search
+        </button>
+      </form>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-cream to-transparent z-[2]"></div>
+  </section>
 
-		{
-			query && (
-				<p class="search-summary">
-					{results.length === 0
-						? `No results for "${query}"`
-						: `${results.length} result${results.length === 1 ? "" : "s"} for "${query}"`}
-				</p>
-			)
-		}
+  <section class="px-6 md:px-10 py-16 max-w-4xl mx-auto">
+    {query && (
+      <p class="font-mono text-[11px] tracking-[0.15em] uppercase text-ink-muted mb-10">
+        {results.length === 0
+          ? `No results for "${query}"`
+          : `${results.length} result${results.length === 1 ? "" : "s"} for "${query}"`}
+      </p>
+    )}
 
-		{
-			results.length > 0 && (
-				<div class="search-results">
-					{results.map((post) => (
-						<PostCard
-							title={post.data.title}
-							excerpt={post.data.excerpt}
-							featuredImage={post.data.featured_image}
-							href={`/posts/${post.id}`}
-							date={post.data.publishedAt ?? undefined}
-							readingTime={getReadingTime(post.data.content)}
-						/>
-					))}
-				</div>
-			)
-		}
+    {results.length > 0 && (
+      <div class="divide-y divide-warm-gray">
+        {results.map((post) => (
+          <a href={`/posts/${post.id}`} class="service-row group py-8 block no-underline">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-display text-xl md:text-2xl font-600 text-dark group-hover:text-orange transition-colors duration-300">{post.data.title}</h3>
+                {post.data.excerpt && <p class="text-ink-light text-sm mt-2 max-w-xl">{post.data.excerpt}</p>}
+              </div>
+              <svg class="text-ink-faint group-hover:text-orange group-hover:rotate-[-45deg] transition-all duration-500 flex-shrink-0 ml-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
 
-		{!query && <p class="search-hint">Enter a search term to find posts.</p>}
-	</section>
+    {!query && <p class="text-ink-muted">Enter a search term to find posts.</p>}
+  </section>
 </Base>
-
-<style>
-	.search-page {
-		max-width: var(--max-width);
-		margin: 0 auto;
-		padding: var(--spacing-8) var(--spacing-6) var(--spacing-16);
-	}
-
-	.search-title {
-		font-size: var(--font-size-2xl);
-		margin-bottom: var(--spacing-6);
-	}
-
-	.search-form {
-		display: flex;
-		gap: var(--spacing-2);
-		margin-bottom: var(--spacing-8);
-	}
-
-	.search-input {
-		flex: 1;
-		padding: var(--spacing-2) var(--spacing-4);
-		font-size: var(--font-size-base);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius);
-		background: var(--color-bg);
-		color: var(--color-text);
-	}
-
-	.search-input:focus {
-		outline: none;
-		border-color: var(--color-accent);
-	}
-
-	.search-button {
-		padding: var(--spacing-2) var(--spacing-6);
-		font-size: var(--font-size-base);
-		background: var(--color-accent);
-		color: var(--color-on-accent);
-		border: none;
-		border-radius: var(--radius);
-		cursor: pointer;
-		font-weight: 500;
-	}
-
-	.search-button:hover {
-		opacity: 0.9;
-	}
-
-	.search-summary {
-		color: var(--color-muted);
-		margin-bottom: var(--spacing-6);
-	}
-
-	.search-hint {
-		color: var(--color-muted);
-	}
-
-	.search-results {
-		display: flex;
-		flex-direction: column;
-		gap: var(--spacing-8);
-	}
-</style>
