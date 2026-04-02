@@ -1,22 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getEmDashEntry, getEmDashCollection } from 'emdash';
-import { Image } from 'emdash/ui';
 
-const [pageRes, servicesRes, agenciesRes] = await Promise.all([
+const [pageRes, postsRes] = await Promise.all([
   getEmDashEntry('pages', 'home'),
-  getEmDashCollection('service_categories', { orderBy: { display_order: 'asc' } }),
-  getEmDashCollection('agencies', { orderBy: { display_order: 'asc' } }),
+  getEmDashCollection('posts', { orderBy: { display_order: 'asc' }, limit: 4 }),
 ]);
 const { entry: page, cacheHint: pageCH } = pageRes;
-const { entries: services } = servicesRes;
-const { entries: agencies } = agenciesRes;
+const { entries: posts } = postsRes;
 
 Astro.cache.set(pageCH);
 
-const featuredAgency = agencies.find((a: any) => a.data.featured);
-const otherAgencies = agencies.filter((a: any) => !a.data.featured).slice(0, 3);
 const sections = page?.data?.sections || {};
+const featuredPost = posts.find((p: any) => p.data.featured);
+const recentPosts = posts.filter((p: any) => !p.data.featured && p.data.featured_image).slice(0, 3);
 ---
 
 <Base title={page?.data?.seo_title || 'FindAnSEOAgency'} description={page?.data?.seo_description} activeNav="/">
@@ -66,167 +63,61 @@ const sections = page?.data?.sections || {};
     </section>
     </div>
 
-    <!-- ═══════ SERVICES ═══════ -->
-    {services.length > 0 && (
-      <section class="pt-28 md:pt-36 pb-24 md:pb-36 px-6 md:px-10">
+    <!-- ═══════ FEATURED POST ═══════ -->
+    {featuredPost && featuredPost.data.featured_image?.src && (
+      <section class="pt-28 md:pt-36 px-6 md:px-10 pb-16">
         <div class="flex flex-col md:flex-row md:items-end gap-6 mb-16">
           <span class="section-label">01</span>
-          <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight text-dark leading-[0.9]">What you'll find here</h2>
+          <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight text-dark leading-[0.9]">Latest Insights</h2>
         </div>
-        <div class="divide-y divide-warm-gray">
-          {services.map((service: any, i: number) => (
-            <div class="service-row group py-8 md:py-10">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-6 md:gap-10">
-                  <span class="font-mono text-[11px] text-ink-muted">0{i + 1}</span>
-                  <h3 class="font-display text-2xl md:text-4xl font-600 text-dark group-hover:text-orange transition-colors duration-400">{service.data.title}</h3>
-                </div>
-                <div class="flex items-center gap-4">
-                  <span class="hidden md:block font-mono text-[10px] tracking-[0.15em] uppercase text-ink-muted">{service.data.label}</span>
-                  <svg class="text-ink-faint group-hover:text-orange group-hover:rotate-[-45deg] transition-all duration-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </div>
-              </div>
-              <div class="service-desc text-ink-light text-sm md:text-base max-w-xl ml-[calc(1.5rem+2.5rem)] md:ml-[calc(2.5rem+3.5rem)] leading-relaxed">
-                {service.data.description}
-              </div>
+        <article class="relative min-h-[60vh] rounded-3xl overflow-hidden cursor-pointer group">
+          <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={featuredPost.data.title} src={featuredPost.data.featured_image.src} />
+          <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/70 to-dark/20"></div>
+          <div class="absolute inset-0 bg-orange/5 mix-blend-multiply"></div>
+          <a href={`/posts/${featuredPost.id}`} class="absolute bottom-0 left-0 right-0 p-8 md:p-14 z-10 no-underline">
+            <div class="flex items-center gap-4 mb-5">
+              <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-orange bg-orange/15 px-3 py-1 rounded-full">Featured</span>
+              <span class="font-mono text-[10px] tracking-wider text-white/50">{featuredPost.data.read_time}</span>
             </div>
+            <h2 class="font-display text-3xl md:text-5xl font-700 tracking-tight text-white leading-[0.95] max-w-2xl group-hover:text-orange transition-colors duration-300">
+              {featuredPost.data.title}
+            </h2>
+            <p class="text-white/60 text-base leading-relaxed mt-4 max-w-lg">{featuredPost.data.excerpt}</p>
+            <div class="mt-8 flex items-center gap-3">
+              <span class="font-display text-sm font-500 text-white">Read article</span>
+              <svg class="text-orange group-hover:translate-x-2 transition-transform duration-300" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </a>
+        </article>
+      </section>
+    )}
+
+    <!-- ═══════ RECENT POSTS ═══════ -->
+    {recentPosts.length > 0 && (
+      <section class="px-6 md:px-10 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {recentPosts.map((post: any) => (
+            <a href={`/posts/${post.id}`} class="group cursor-pointer no-underline block">
+              {post.data.featured_image?.src && (
+                <div class="relative overflow-hidden rounded-2xl aspect-[3/2] mb-5">
+                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={post.data.title} src={post.data.featured_image.src} />
+                  <div class="absolute inset-0 bg-orange/5 mix-blend-multiply"></div>
+                </div>
+              )}
+              <div class="flex items-center gap-3 mb-3">
+                <span class="font-mono text-[10px] tracking-[0.2em] text-orange uppercase">Insight</span>
+                <span class="w-1 h-1 rounded-full bg-ink-faint"></span>
+                <span class="font-mono text-[10px] text-ink-muted">{post.data.read_time}</span>
+              </div>
+              <h3 class="font-display text-xl font-600 text-dark group-hover:text-orange transition-colors duration-300">{post.data.title}</h3>
+              <p class="text-ink-light text-sm line-clamp-2 mt-2 leading-relaxed">{post.data.excerpt}</p>
+            </a>
           ))}
         </div>
-      </section>
-    )}
-
-    <!-- ═══════ HOW IT WORKS ═══════ -->
-    {sections.howItWorks && (
-      <section class="bg-dark text-on-dark relative grain">
-        <div class="pt-24 md:pt-36 pb-12 px-6 md:px-10">
-          <div class="flex flex-col md:flex-row md:items-end gap-6">
-            <span class="section-label text-orange-light">02</span>
-            <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9]">How it works</h2>
-          </div>
-        </div>
-        <div class="relative z-[2] px-6 md:px-10 pb-24 md:pb-36">
-          {sections.howItWorks.map((step: any, i: number) => (
-            <div class="sticky h-[60vh] md:h-[50vh] mb-6" style={`top: calc(6rem + ${i * 2.5}rem);`}>
-              <div class="bg-dark-elevated border border-dark-border rounded-3xl p-8 md:p-12 h-full flex flex-col md:flex-row gap-8 md:gap-14 items-start md:items-center relative overflow-hidden" style={`box-shadow: 0 -8px 30px rgba(0,0,0,${0.3 + i * 0.15});`}>
-                <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange/15 to-transparent"></div>
-                <div class="flex-shrink-0">
-                  <span class="font-display text-[5rem] md:text-[8rem] font-700 leading-none text-transparent bg-clip-text bg-gradient-to-b from-orange/40 to-dark-border">{step.step}</span>
-                </div>
-                <div class="flex-grow">
-                  <h3 class="font-display text-2xl md:text-4xl font-600 mb-4">{step.title}</h3>
-                  <p class="text-on-dark-muted text-base md:text-lg leading-relaxed max-w-lg">{step.description}</p>
-                </div>
-                <div class="flex-shrink-0 w-16 h-16 rounded-2xl bg-dark border border-dark-border flex items-center justify-center">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF5F00" stroke-width="1.5" stroke-linecap="round">
-                    {i === 0 && <><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></>}
-                    {i === 1 && <><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></>}
-                    {i === 2 && <><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></>}
-                  </svg>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- ═══════ FEATURED AGENCY ═══════ -->
-    {featuredAgency && (
-      <section class="relative min-h-[80vh] flex items-end overflow-hidden">
-        {featuredAgency.data.hero_image?.src ? (
-          <img alt="" class="absolute inset-0 w-full h-full object-cover" src={featuredAgency.data.hero_image.src} aria-hidden="true" />
-        ) : (
-          <div class="absolute inset-0 bg-dark-surface"></div>
-        )}
-        <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/90 to-dark/30"></div>
-        <div class="absolute inset-0 bg-orange/5 mix-blend-multiply"></div>
-        <div class="relative z-10 w-full px-6 md:px-10 pb-16 md:pb-24 pt-40">
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-10">
-            <div class="max-w-2xl">
-              <span class="section-label text-orange-light">03 — Featured</span>
-              <h2 class="font-display text-5xl md:text-8xl font-700 tracking-tight text-on-dark leading-[0.9] mt-4">{featuredAgency.data.title}</h2>
-              <div class="flex items-center gap-4 mt-4">
-                <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-orange bg-orange/15 px-3 py-1 rounded-full">{featuredAgency.data.badge}</span>
-                {featuredAgency.data.retention_rate && (
-                  <span class="font-mono text-[10px] tracking-wider text-on-dark-muted">{featuredAgency.data.retention_rate}</span>
-                )}
-              </div>
-              <p class="text-on-dark-muted text-lg leading-relaxed mt-6 max-w-lg">{featuredAgency.data.description}</p>
-            </div>
-            <button class="bg-orange hover:bg-orange-dim text-white px-8 py-4 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,95,0,0.3)] whitespace-nowrap self-start md:self-end">
-              {featuredAgency.data.cta_text || 'View Profile'}
-            </button>
-          </div>
-        </div>
-      </section>
-    )}
-
-    <!-- ═══════ TOP RATED ═══════ -->
-    {otherAgencies.length > 0 && (
-      <section id="top-rated" class="py-24 md:py-32 px-6 md:px-10 bg-dark text-on-dark relative overflow-hidden grain">
-        <!-- Ambient canvas -->
-        <canvas id="rated-canvas" class="absolute inset-0 z-0" aria-hidden="true"></canvas>
-
-        <div class="flex flex-col md:flex-row md:items-end gap-6 mb-16 relative z-[2]">
-          <span class="section-label text-orange-light">04</span>
-          <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9]">Top rated</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-[2]">
-          {otherAgencies.map((agency: any, i: number) => (
-            <div class={`stack-card bg-dark-elevated rounded-3xl p-8 md:p-10 cursor-pointer relative overflow-hidden ${i === 1 ? 'md:-mt-6' : ''} ${i === 2 ? 'md:mt-3' : ''}`}>
-              <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange/30 to-transparent"></div>
-              <div class="flex items-center justify-between mb-8 relative z-[2]">
-                <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-on-dark-muted">0{i + 1}</span>
-                <div class="flex items-center gap-1">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#FF5F00"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="font-mono text-sm font-500">{agency.data.rating}</span>
-                </div>
-              </div>
-              <h3 class="font-display text-2xl font-600 mb-3 relative z-[2]">{agency.data.title}</h3>
-              <p class="text-on-dark-muted text-sm leading-relaxed mb-8 relative z-[2]">{agency.data.description}</p>
-              <div class="flex items-center justify-between pt-6 border-t border-dark-border relative z-[2]">
-                <span class="font-mono text-[9px] tracking-[0.2em] uppercase text-orange">{agency.data.badge}</span>
-                <svg class="text-on-dark-faint" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- ═══════ SIDE PANELS ═══════ -->
-    {(sections.eventCard || sections.joinCard) && (
-      <section class="px-6 md:px-10 pb-24 bg-cream-dark">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {sections.eventCard && (
-            <div class="bg-dark text-on-dark rounded-3xl p-10 md:p-14 flex flex-col justify-between min-h-[280px] relative overflow-hidden grain">
-              <div class="relative z-[2]">
-                <span class="section-label text-orange-light">{sections.eventCard.label}</span>
-                <h4 class="font-display text-3xl md:text-4xl font-600 mt-4 leading-tight">{sections.eventCard.title}</h4>
-              </div>
-              <div class="relative z-[2] flex items-center gap-3 font-mono text-[11px] text-on-dark-muted tracking-wider">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF5F00" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                <span>{sections.eventCard.date}</span>
-              </div>
-            </div>
-          )}
-          {sections.joinCard && (
-            <div class="bg-orange text-white rounded-3xl p-10 md:p-14 flex flex-col justify-between min-h-[280px] relative overflow-hidden">
-              <div class="absolute inset-0 opacity-10" aria-hidden="true">
-                <svg width="100%" height="100%" class="absolute inset-0">
-                  <pattern id="diag" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                    <line x1="0" y1="0" x2="0" y2="40" stroke="white" stroke-width="0.5"/>
-                  </pattern>
-                  <rect width="100%" height="100%" fill="url(#diag)"/>
-                </svg>
-              </div>
-              <h4 class="font-display text-3xl md:text-4xl font-600 leading-tight relative z-[2]">{sections.joinCard.title}</h4>
-              <div class="flex items-center gap-3 cursor-pointer group relative z-[2]">
-                <span class="font-display font-500 text-base">{sections.joinCard.buttonText}</span>
-                <svg class="group-hover:translate-x-2 transition-transform duration-300" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </div>
-            </div>
-          )}
+        <div class="mt-12 text-center">
+          <a href="/blog" class="inline-block bg-dark text-white px-8 py-4 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 hover:shadow-[0_20px_40px_rgba(11,11,11,0.2)] no-underline">
+            View all articles
+          </a>
         </div>
       </section>
     )}
@@ -235,7 +126,7 @@ const sections = page?.data?.sections || {};
     {page?.data?.cta_title && page.data.cta_style === 'newsletter' && (
       <section class="mesh-dark grain relative py-28 md:py-40 px-6 md:px-10 overflow-hidden">
         <div class="relative z-[3] max-w-3xl">
-          <span class="section-label text-orange-light">05 — Connect</span>
+          <span class="section-label text-orange-light">02 — Connect</span>
           <h2 class="font-display text-5xl md:text-8xl font-700 tracking-tight text-on-dark leading-[0.85] mt-6">{page.data.cta_title}</h2>
           <p class="text-on-dark-muted text-lg leading-relaxed mt-6 mb-12 max-w-md">{page.data.cta_description}</p>
           <div class="max-w-md">
@@ -253,18 +144,11 @@ const sections = page?.data?.sections || {};
 
   </main>
 
-  <!-- ═══════ SCRIPTS ═══════ -->
+  <!-- ═══════ HERO CANVAS ═══════ -->
   <script>
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isRetina = window.devicePixelRatio > 1;
 
-
-    /* ─────────────────────────────────────────────
-       HERO — Flowing magnetic field lines
-       Lines flow across the screen like a fluid.
-       Mouse acts as a vortex that warps the flow.
-       Disabled on Retina displays for performance.
-    ───────────────────────────────────────────── */
     (function heroCanvas() {
       const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
       if (!canvas) return;
@@ -287,7 +171,6 @@ const sections = page?.data?.sections || {};
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
-      // Noise helper — simple layered sine approximation
       function noise(x: number, y: number, t: number) {
         return Math.sin(x * 0.003 + t * 0.0004) * 0.6
              + Math.sin(y * 0.004 - t * 0.0003) * 0.4
@@ -297,8 +180,6 @@ const sections = page?.data?.sections || {};
 
       function draw(time: number) {
         ctx.clearRect(0, 0, w, h);
-
-        // Smooth mouse position for organic feel
         if (mouse.active) {
           smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
           smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
@@ -306,24 +187,18 @@ const sections = page?.data?.sections || {};
           smoothMouse.x += (-9999 - smoothMouse.x) * 0.02;
           smoothMouse.y += (-9999 - smoothMouse.y) * 0.02;
         }
-
         for (let i = 0; i < LINE_COUNT; i++) {
           const baseY = (h / (LINE_COUNT - 1)) * i;
           const drift = Math.sin(time * 0.0003 + i * 0.7) * 25;
           let px = -20;
           let py = baseY + drift;
-
           ctx.beginPath();
           ctx.moveTo(px, py);
-
           const maxSteps = Math.ceil((w + 40) / STEP);
           for (let s = 0; s < maxSteps; s++) {
-            // Flow direction from noise field
             const angle = noise(px, py, time) * 0.8;
             let dx = Math.cos(angle) * STEP;
             let dy = Math.sin(angle) * STEP * 0.6;
-
-            // Mouse vortex — swirl lines around cursor
             const mx = px - smoothMouse.x;
             const my = py - smoothMouse.y;
             const mDist = Math.sqrt(mx * mx + my * my);
@@ -331,29 +206,21 @@ const sections = page?.data?.sections || {};
             if (mDist < RADIUS && mDist > 1) {
               const strength = ((RADIUS - mDist) / RADIUS);
               const curve = strength * strength * 4;
-              // Perpendicular push creates swirl
               dx += (-my / mDist) * curve * STEP * 0.5;
               dy += (mx / mDist) * curve * STEP * 0.5;
             }
-
             px += dx;
             py += dy;
             ctx.lineTo(px, py);
-
             if (px > w + 40) break;
           }
-
-          // Glow intensity — brighter near center, dimmer at edges
           const verticalPos = baseY / h;
           const edgeFade = 1 - Math.abs(verticalPos - 0.5) * 1.6;
           const alpha = Math.max(0, 0.03 + edgeFade * 0.04 + Math.sin(time * 0.001 + i * 0.3) * 0.015);
-
           ctx.strokeStyle = `rgba(255, 95, 0, ${alpha})`;
           ctx.lineWidth = 1 + edgeFade * 0.5;
           ctx.stroke();
         }
-
-        // Glow hotspot at mouse
         if (mouse.active) {
           const grd = ctx.createRadialGradient(smoothMouse.x, smoothMouse.y, 0, smoothMouse.x, smoothMouse.y, 200);
           grd.addColorStop(0, 'rgba(255, 95, 0, 0.06)');
@@ -361,7 +228,6 @@ const sections = page?.data?.sections || {};
           ctx.fillStyle = grd;
           ctx.fillRect(smoothMouse.x - 200, smoothMouse.y - 200, 400, 400);
         }
-
         if (!reducedMotion) requestAnimationFrame(draw);
       }
 
@@ -373,101 +239,7 @@ const sections = page?.data?.sections || {};
       });
       section.addEventListener('mouseleave', () => { mouse.active = false; });
       window.addEventListener('resize', resize);
-
       resize();
-      if (!reducedMotion) requestAnimationFrame(draw); else draw(0);
-    })();
-
-
-    /* ─────────────────────────────────────────────
-       TOP RATED — Drifting aurora bands
-       Slow, ambient, horizontal light bands that
-       breathe and shift. No mouse interaction needed.
-    ───────────────────────────────────────────── */
-    (function ratedCanvas() {
-      const canvas = document.getElementById('rated-canvas') as HTMLCanvasElement;
-      if (!canvas) return;
-      if (isRetina) { canvas.style.display = 'none'; return; }
-      const ctx = canvas.getContext('2d')!;
-      const section = document.getElementById('top-rated')!;
-      let w = 0, h = 0;
-
-      interface Band {
-        y: number; amp: number; freq: number; speed: number;
-        alpha: number; width: number; phase: number;
-      }
-      const bands: Band[] = [];
-
-      function resize() {
-        const r = section.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = r.width; h = r.height;
-        canvas.width = w * dpr; canvas.height = h * dpr;
-        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
-
-      function init() {
-        resize();
-        bands.length = 0;
-        for (let i = 0; i < 6; i++) {
-          bands.push({
-            y: h * (0.1 + i * 0.16),
-            amp: 30 + Math.random() * 50,
-            freq: 0.001 + Math.random() * 0.002,
-            speed: 0.0002 + Math.random() * 0.0004,
-            alpha: 0.015 + Math.random() * 0.025,
-            width: 60 + Math.random() * 120,
-            phase: Math.random() * Math.PI * 2,
-          });
-        }
-      }
-
-      function draw(time: number) {
-        ctx.clearRect(0, 0, w, h);
-
-        for (const b of bands) {
-          const step = 12;
-          const points: {x: number; y: number}[] = [];
-
-          for (let x = -step; x <= w + step; x += step) {
-            const y = b.y
-              + Math.sin(x * b.freq + time * b.speed + b.phase) * b.amp
-              + Math.cos(x * b.freq * 0.6 + time * b.speed * 1.5 + b.phase * 2) * b.amp * 0.4;
-            points.push({ x, y });
-          }
-
-          // Draw as a filled gradient band
-          const halfW = b.width / 2;
-          ctx.beginPath();
-          ctx.moveTo(points[0].x, points[0].y - halfW);
-          for (let i = 1; i < points.length; i++) {
-            const xc = (points[i - 1].x + points[i].x) / 2;
-            const yc = (points[i - 1].y + points[i].y) / 2 - halfW;
-            ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y - halfW, xc, yc);
-          }
-          for (let i = points.length - 1; i >= 1; i--) {
-            const xc = (points[i].x + points[i - 1].x) / 2;
-            const yc = (points[i].y + points[i - 1].y) / 2 + halfW;
-            ctx.quadraticCurveTo(points[i].x, points[i].y + halfW, xc, yc);
-          }
-          ctx.closePath();
-
-          const grd = ctx.createLinearGradient(0, b.y - halfW, 0, b.y + halfW);
-          grd.addColorStop(0, 'rgba(255, 95, 0, 0)');
-          grd.addColorStop(0.35, `rgba(255, 95, 0, ${b.alpha * 0.7})`);
-          grd.addColorStop(0.5, `rgba(255, 95, 0, ${b.alpha})`);
-          grd.addColorStop(0.65, `rgba(255, 95, 0, ${b.alpha * 0.7})`);
-          grd.addColorStop(1, 'rgba(255, 95, 0, 0)');
-          ctx.fillStyle = grd;
-          ctx.fill();
-        }
-
-        if (!reducedMotion) requestAnimationFrame(draw);
-      }
-
-      window.addEventListener('resize', () => { init(); });
-      init();
       if (!reducedMotion) requestAnimationFrame(draw); else draw(0);
     })();
   </script>

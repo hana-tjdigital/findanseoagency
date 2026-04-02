@@ -3,13 +3,13 @@
 	"version": "1",
 	"meta": {
 		"name": "FindAnSEOAgency",
-		"description": "The definitive directory for performance-driven SEO agencies",
+		"description": "Insights on SEO, AI optimization, and the future of search",
 		"author": "FindAnSEOAgency"
 	},
 
 	"settings": {
 		"title": "FindAnSEOAgency",
-		"tagline": "The definitive directory for performance-driven SEO agencies."
+		"tagline": "Insights on SEO, AI optimization, and the future of search."
 	},
 
 	"collections": [
@@ -44,39 +44,6 @@
 			]
 		},
 		{
-			"slug": "agencies",
-			"label": "Agencies",
-			"labelSingular": "Agency",
-			"supports": ["drafts", "revisions", "search", "seo"],
-			"fields": [
-				{ "slug": "title", "label": "Name", "type": "string", "required": true, "searchable": true },
-				{ "slug": "description", "label": "Description", "type": "text", "searchable": true },
-				{ "slug": "rating", "label": "Rating", "type": "number" },
-				{ "slug": "badge", "label": "Badge", "type": "string" },
-				{ "slug": "badge_style", "label": "Badge Style", "type": "string" },
-				{ "slug": "icon", "label": "Icon", "type": "string" },
-				{ "slug": "logo_image", "label": "Logo", "type": "image" },
-				{ "slug": "hero_image", "label": "Hero Image", "type": "image" },
-				{ "slug": "retention_rate", "label": "Retention Rate", "type": "string" },
-				{ "slug": "cta_text", "label": "CTA Text", "type": "string" },
-				{ "slug": "featured", "label": "Featured", "type": "boolean" },
-				{ "slug": "display_order", "label": "Display Order", "type": "integer" }
-			]
-		},
-		{
-			"slug": "service_categories",
-			"label": "Service Categories",
-			"labelSingular": "Service Category",
-			"supports": ["drafts"],
-			"fields": [
-				{ "slug": "title", "label": "Title", "type": "string", "required": true },
-				{ "slug": "description", "label": "Description", "type": "text" },
-				{ "slug": "icon", "label": "Icon", "type": "string" },
-				{ "slug": "label", "label": "Label", "type": "string" },
-				{ "slug": "display_order", "label": "Display Order", "type": "integer" }
-			]
-		},
-		{
 			"slug": "posts",
 			"label": "Posts",
 			"labelSingular": "Post",
@@ -105,7 +72,6 @@
 				{ "slug": "featured-guide", "label": "Featured Guide" },
 				{ "slug": "market-insights", "label": "Market Insights" },
 				{ "slug": "strategy", "label": "Strategy" },
-				{ "slug": "agency-reviews", "label": "Agency Reviews" },
 				{ "slug": "ai-optimization", "label": "AI Optimization" },
 				{ "slug": "industry-news", "label": "Industry News" }
 			]
@@ -121,7 +87,6 @@
 				{ "slug": "llm", "label": "LLM" },
 				{ "slug": "seo", "label": "SEO" },
 				{ "slug": "ai", "label": "AI" },
-				{ "slug": "pricing", "label": "Pricing" },
 				{ "slug": "content-strategy", "label": "Content Strategy" }
 			]
 		}
@@ -132,9 +97,8 @@
 			"name": "primary",
 			"label": "Primary Navigation",
 			"items": [
-				{ "type": "custom", "label": "Agencies", "url": "/" },
+				{ "type": "custom", "label": "Home", "url": "/" },
 				{ "type": "custom", "label": "AI Optimization", "url": "/ai-optimization" },
-				{ "type": "custom", "label": "SEO Basics", "url": "/seo-agencies" },
 				{ "type": "custom", "label": "Blog", "url": "/blog" }
 			]
 		}
@@ -156,7 +120,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "Curating the world's most sophisticated digital search partners for the intelligence era."
+									"text": "Insights on SEO, AI optimization, and the future of search — built for the intelligence era."
 								}
 							]
 						}
@@ -215,65 +179,17 @@
 				"status": "published",
 				"data": {
 					"title": "Home",
-					"hero_eyebrow": "The Technical Curator",
-					"hero_title": "Find Your Next SEO Partner for the",
-					"hero_highlight": "AI Era",
-					"hero_description": "The definitive directory for performance-driven SEO agencies. We vet the experts specializing in LLM optimization, semantic search, and predictive analytics.",
-					"hero_primary_btn_text": "Search Agencies",
-					"hero_primary_btn_link": "/",
-					"hero_secondary_btn_text": "How It Works",
-					"hero_secondary_btn_link": "#how-it-works",
-					"sections": {
-						"howItWorks": [
-							{ "step": "01", "title": "Define Your Needs", "description": "Tell us about your industry, current SEO status, and specific AI integration goals for your organic search strategy." },
-							{ "step": "02", "title": "Browse Top Agencies", "description": "Access our hand-picked list of elite agencies. Each profile includes case studies focused on modern search algorithms." },
-							{ "step": "03", "title": "Connect & Optimize", "description": "Request introductions directly. Start building an SEO roadmap designed for the next generation of search engines." }
-						],
-						"eventCard": {
-							"label": "UPCOMING EVENT",
-							"title": "The Future of E-E-A-T in 2024",
-							"date": "AUG 24, 2024"
-						},
-						"joinCard": {
-							"title": "Ready to transform your search visibility?",
-							"buttonText": "Join the Directory"
-						},
-						"footerColumns": [
-							{
-								"title": "Directory",
-								"links": [
-									{ "label": "Top Agencies", "href": "/" },
-									{ "label": "Pricing Models", "href": "/seo-agencies" },
-									{ "label": "Case Studies", "href": "#" },
-									{ "label": "Reviews", "href": "#" }
-								]
-							},
-							{
-								"title": "Knowledge",
-								"links": [
-									{ "label": "AI Optimization", "href": "/ai-optimization" },
-									{ "label": "Search Trends", "href": "#" },
-									{ "label": "SEO Basics", "href": "/seo-agencies" },
-									{ "label": "Webinars", "href": "#" }
-								]
-							},
-							{
-								"title": "Company",
-								"links": [
-									{ "label": "About Us", "href": "#" },
-									{ "label": "Contact", "href": "#" },
-									{ "label": "Privacy", "href": "#" },
-									{ "label": "Terms", "href": "#" }
-								]
-							}
-						]
-					},
-					"cta_title": "The future of SEO isn't human-only. It's augmented.",
-					"cta_description": "Join 50,000+ marketing leaders getting the latest on AI search shifts and agency insights delivered weekly.",
+					"hero_eyebrow": "The Intelligence Era",
+					"hero_title": "Navigate the Future of",
+					"hero_highlight": "Search & AI",
+					"hero_description": "Expert insights on SEO, generative engine optimization, and AI-driven search strategy. Stay ahead of the algorithms that shape visibility.",
+					"sections": {},
+					"cta_title": "The future of search isn't human-only. It's augmented.",
+					"cta_description": "Join 50,000+ marketing leaders getting the latest on AI search shifts and optimization insights delivered weekly.",
 					"cta_btn_text": "Subscribe",
 					"cta_style": "newsletter",
-					"seo_title": "FindAnSEOAgency | Find Your Next SEO Partner for the AI Era",
-					"seo_description": "The definitive directory for performance-driven SEO agencies specializing in AI optimization.",
+					"seo_title": "FindAnSEOAgency | Navigate the Future of Search & AI",
+					"seo_description": "Expert insights on SEO, generative engine optimization, and AI-driven search strategy.",
 					"content": []
 				}
 			},
@@ -289,8 +205,8 @@
 					"hero_description": "The future of SEO is generative. Learn how to optimize for LLMs like ChatGPT, Claude, and Gemini to ensure your brand remains visible in the age of AI.",
 					"hero_primary_btn_text": "Download GEO Guide",
 					"hero_primary_btn_link": "#",
-					"hero_secondary_btn_text": "Explore Agencies",
-					"hero_secondary_btn_link": "/",
+					"hero_secondary_btn_text": "Read the Blog",
+					"hero_secondary_btn_link": "/blog",
 					"hero_stat_label": "LLM Reach",
 					"hero_stat_value": "+142%",
 					"hero_stat_description": "Increased visibility in Gemini responses",
@@ -298,7 +214,7 @@
 						"whatIsGeo": {
 							"title": "What is GEO?",
 							"description": "Generative Engine Optimization (GEO) is the evolution of traditional search engine optimization. It focuses on how Large Language Models (LLMs) synthesize and present information to users.",
-							"detail": "Unlike classic SEO which targets ranked lists, GEO targets citations and contextual inclusion. We help you transition from ranking for keywords to becoming the definitive source for AI recommendation engines.",
+							"detail": "Unlike classic SEO which targets ranked lists, GEO targets citations and contextual inclusion. Learn how to transition from ranking for keywords to becoming the definitive source for AI recommendation engines.",
 							"imageUrl": "https://lh3.googleusercontent.com/aida-public/AB6AXuCaerD8X0QsiryX8kwcG3JoX6Rwvf643O8XHwZ8msfZ2QQg_ggd6rF2kO5BsRPggK_Xpv90t25MHkGxmF6FU_ASnhtHIJuNxGJzJJxvJGJEzWowWVIMF6zoZnJrhbsLBivFYHXT7r3XVtnmr5Ow56mdzBb5HUUbuGhJAXx8KaOu-ZyYIVCikANVDp-hjKxGC0iTHtiavhzqRh8fLsi2ljhQZGIvwnF6o3u20cIrjGjz9BRbPq18GvfKja6XG1LyAnmXRUviKS46n98",
 							"features": [
 								{ "title": "Citation Engineering", "description": "Structured data that LLMs can easily parse and credit." },
@@ -307,9 +223,9 @@
 						},
 						"expertise": [
 							{ "title": "AI-First Strategy", "description": "Comprehensive audits of how LLMs currently perceive your brand and a roadmap to improve generative visibility across all major models.", "features": ["LLM Sentiment Audits", "Prompt Sensitivity Testing"] },
-							{ "title": "LLM Engines", "description": "Optimizing recommendation engines within ChatGPT and Claude to prioritize your services." },
+							{ "title": "LLM Engines", "description": "Optimizing recommendation engines within ChatGPT and Claude to prioritize your content." },
 							{ "title": "Semantic Indexing", "description": "Aligning your website's knowledge graph with the high-dimensional vector space of generative engines." },
-							{ "title": "Real-time LLM Monitoring", "description": "Track your brand's share-of-voice in generative search results with our proprietary GEO dashboard." }
+							{ "title": "Real-time LLM Monitoring", "description": "Track your brand's share-of-voice in generative search results." }
 						],
 						"guides": [
 							{ "number": "01", "title": "The GEO Playbook: Citations in 2024", "description": "Mastering the art of appearing in ChatGPT's \"Sources\" footer.", "readTime": "5 min read" },
@@ -317,68 +233,13 @@
 							{ "number": "03", "title": "Vector Search and Your Content Strategy", "description": "Moving from keyword strings to high-dimensional intent.", "readTime": "12 min read" }
 						]
 					},
-					"cta_title": "Ready to Audit Your AI Presence?",
-					"cta_description": "Connect with one of our specialized GEO agencies today and secure your spot in the future of search.",
-					"cta_btn_text": "Find a GEO Agency Now",
-					"cta_btn_link": "/",
+					"cta_title": "Ready to Optimize for AI Search?",
+					"cta_description": "Dive deeper into GEO strategies and secure your spot in the future of search.",
+					"cta_btn_text": "Read the Blog",
+					"cta_btn_link": "/blog",
 					"cta_style": "dark",
 					"seo_title": "AI Search Optimization Hub | FindAnSEOAgency",
 					"seo_description": "Master Generative Engine Optimization (GEO) and optimize for LLMs like ChatGPT, Claude, and Gemini.",
-					"content": []
-				}
-			},
-			{
-				"id": "seo-agencies",
-				"slug": "seo-agencies",
-				"status": "published",
-				"data": {
-					"title": "Finding an SEO Agency",
-					"hero_eyebrow": "Expert Navigation",
-					"hero_title": "Your Path to the Right",
-					"hero_highlight": "SEO Partner",
-					"hero_description": "Comprehensive resources to help you evaluate, select, and work with top-tier SEO agencies. We bridge the gap between complex data and business growth.",
-					"hero_primary_btn_text": "Browse Top Rated",
-					"hero_primary_btn_link": "/",
-					"hero_secondary_btn_text": "Download Guide",
-					"hero_secondary_btn_link": "#",
-					"sections": {
-						"evaluationCriteria": {
-							"sectionLabel": "Selection Framework",
-							"sectionTitle": "Agency Evaluation Criteria",
-							"sectionDescription": "Our data-driven checklist ensures you skip the fluff and find partners that deliver measurable ROI.",
-							"mainCard": {
-								"title": "Technical Proficiency Audit",
-								"description": "Evaluate an agency's ability to handle complex site architectures, Core Web Vitals, and semantic schema markup.",
-								"checklist": ["Backlink Profile Integrity", "Content Strategy Depth", "Page Speed Optimization", "Mobile-First Readiness"]
-							},
-							"roiCard": {
-								"title": "ROI Modeling",
-								"description": "Top agencies don't just report rankings; they forecast revenue and lead generation metrics.",
-								"buttonText": "View Calculator"
-							},
-							"smallCards": [
-								{ "title": "Transparency & Ethics", "description": "Ensure the agency follows White-Hat guidelines and provides full visibility into their process." },
-								{ "title": "Reporting Frequency", "description": "Dedicated account managers and real-time dashboarding should be standard, not an extra." },
-								{ "title": "Proven Track Record", "description": "Case studies should demonstrate long-term retention and historical performance in your niche." }
-							]
-						},
-						"pricing": {
-							"title": "SEO Pricing Breakdown:",
-							"highlight": "What Should You Pay?",
-							"description": "The cost of SEO can vary from $500 to $50,000 per month. Our comprehensive guide deconstructs the pricing models\u2014hourly, retainer, and project-based\u2014to ensure you're getting fair market value.",
-							"items": [
-								{ "text": "Monthly Retainers: $2,500 - $10k+" },
-								{ "text": "Project-Based: $5k - $25k" }
-							],
-							"buttonText": "Full Pricing Guide",
-							"stats": [
-								{ "label": "Average ROI", "value": "320%" },
-								{ "label": "Payback Period", "value": "6 Mo" }
-							]
-						}
-					},
-					"seo_title": "FindAnSEOAgency | Your Path to the Right SEO Partner",
-					"seo_description": "Comprehensive resources to help you evaluate, select, and work with top-tier SEO agencies.",
 					"content": []
 				}
 			},
@@ -391,141 +252,13 @@
 					"hero_eyebrow": "Editorial Intelligence",
 					"hero_title": "Deep Dives into",
 					"hero_highlight": "SEO & AI",
-					"hero_description": "Analyzing the intersection of generative search, technical optimization, and high-performance agency partnerships.",
+					"hero_description": "Analyzing the intersection of generative search, technical optimization, and the evolving search landscape.",
 					"sections": {
-						"categories": ["All Insights", "AI Optimization", "SEO Basics", "Agency Reviews", "Industry News"]
+						"categories": ["All Insights", "AI Optimization", "Strategy", "Market Insights", "Industry News"]
 					},
 					"seo_title": "Blog | FindAnSEOAgency",
-					"seo_description": "Deep dives into SEO and AI \u2014 analyzing generative search, technical optimization, and agency partnerships.",
+					"seo_description": "Deep dives into SEO and AI — analyzing generative search, technical optimization, and the evolving search landscape.",
 					"content": []
-				}
-			}
-		],
-		"agencies": [
-			{
-				"id": "tj-digital",
-				"slug": "tj-digital",
-				"status": "published",
-				"data": {
-					"title": "TJ Digital",
-					"description": "Founded by TJ Robertson, a Las Vegas-based SEO veteran with 15 years of experience. TJ Digital specializes in AI-driven search strategy, LLM optimization, and predictive analytics for enterprise brands.",
-					"rating": 5.0,
-					"badge": "Premier Agency",
-					"badge_style": "premier",
-					"icon": "auto_awesome",
-					"logo_image": {
-						"$media": {
-							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuArieJfXqX0ojywJyced16HxbUpsooBgN8smckBqGxuayRaTgut65VjjxfkwqlTlMWfMNsjyiJxfaD1dHGeDR_cacGs8wC9UuO4NUc71_1DVMykSdbZYLjED5edckOenZu71qC_FRsq9m1ajKQC4gCdehRk9SQCkE8KxsMjSBi1oPrziO-3QBR-dxraTYTTp6GM7n6oTr0kvzvHut_m_JSf7aJKahwiwqfrsHsyJA62dtM0Qsq2pMscnlJWz_CNiR-HtmEAoN9Q-JE",
-							"alt": "TJ Digital logo",
-							"filename": "tj-digital-logo.jpg"
-						}
-					},
-					"hero_image": {
-						"$media": {
-							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBWrP4s_3Ta_-xElz3_AxyBzIMyYmGNiE3XY-aGmSLcxQsZaxplT3GsP6zu0ry1jnc4bYaf7zv7Cwoe2tsTj026MMW4H16ZjGGTBoUWNQl7B5Y_CTX3z0SBUG6mcRB8_hQ782q70G2TwwQC_DqwLZsM93VCIKo9Y7EkBpALixMbMgRpHyPIFD1XZ66nEg_ssF1bbWRe_MvGpEw40L6do-h5LPFDVVjAIXDgQoZlwFmne1wSSsnuDl_96HDWfojEh3WK00ERa8K6pJY",
-							"alt": "TJ Digital office",
-							"filename": "tj-digital-hero.jpg"
-						}
-					},
-					"retention_rate": "98% Client Retention",
-					"cta_text": "View Full Case Study",
-					"featured": true,
-					"display_order": 1
-				}
-			},
-			{
-				"id": "vortex-seo-lab",
-				"slug": "vortex-seo-lab",
-				"status": "published",
-				"data": {
-					"title": "Vortex SEO Lab",
-					"description": "Specializing in Enterprise E-commerce and technical architecture audits for global brands.",
-					"rating": 4.9,
-					"badge": "Premium",
-					"badge_style": "premium",
-					"icon": "rocket_launch",
-					"featured": false,
-					"display_order": 2
-				}
-			},
-			{
-				"id": "summit-digital",
-				"slug": "summit-digital",
-				"status": "published",
-				"data": {
-					"title": "Summit Digital",
-					"description": "Award-winning content strategy and semantic SEO for high-growth SaaS and Tech firms.",
-					"rating": 5.0,
-					"badge": "Niche Expert",
-					"badge_style": "niche",
-					"icon": "hub",
-					"featured": false,
-					"display_order": 3
-				}
-			},
-			{
-				"id": "metric-bloom",
-				"slug": "metric-bloom",
-				"status": "published",
-				"data": {
-					"title": "Metric Bloom",
-					"description": "Combining AI-driven keyword research with traditional PR for authoritative link building.",
-					"rating": 4.8,
-					"badge": "Data Driven",
-					"badge_style": "data-driven",
-					"icon": "query_stats",
-					"featured": false,
-					"display_order": 4
-				}
-			}
-		],
-		"service_categories": [
-			{
-				"id": "ai-content-strategy",
-				"slug": "ai-content-strategy",
-				"status": "published",
-				"data": {
-					"title": "AI-Powered Content Strategy",
-					"description": "Leveraging generative models to create authoritative, human-centric content at scale.",
-					"icon": "auto_awesome",
-					"label": "DATA-FIRST CONTENT",
-					"display_order": 1
-				}
-			},
-			{
-				"id": "llm-training",
-				"slug": "llm-training",
-				"status": "published",
-				"data": {
-					"title": "LLM Training & Fine-Tuning",
-					"description": "Ensuring your brand data is accurately represented in Large Language Model results.",
-					"icon": "model_training",
-					"label": "MODEL OPTIMIZATION",
-					"display_order": 2
-				}
-			},
-			{
-				"id": "semantic-search",
-				"slug": "semantic-search",
-				"status": "published",
-				"data": {
-					"title": "Semantic Search Integration",
-					"description": "Mapping entity relationships to dominate knowledge graph placements and rich snippets.",
-					"icon": "hub",
-					"label": "GRAPH STRUCTURE",
-					"display_order": 3
-				}
-			},
-			{
-				"id": "predictive-analytics",
-				"slug": "predictive-analytics",
-				"status": "published",
-				"data": {
-					"title": "Predictive SEO Analytics",
-					"description": "Using machine learning to forecast algorithmic shifts and adjust strategy in real-time.",
-					"icon": "query_stats",
-					"label": "ML FORECASTING",
-					"display_order": 4
 				}
 			}
 		],
@@ -556,37 +289,7 @@
 					]
 				},
 				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["featured-guide"],
-					"tag": ["geo", "ai"]
-				}
-			},
-			{
-				"id": "seo-cost-guide",
-				"slug": "seo-cost-2024-pricing-guide",
-				"status": "published",
-				"data": {
-					"title": "How Much Does SEO Cost? 2024 Pricing Guide for Mid-Market Brands",
-					"excerpt": "A detailed breakdown of monthly retainers, project-based fees, and what you should expect to pay for top-tier SEO performance.",
-					"read_time": "5 min read",
-					"featured": false,
-					"display_order": 2,
-					"featured_image": {
-						"$media": {
-							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBq42o-8YXhd-nWWOeNfVRr0eIkkzs3Yv7VMUn_jhaycbeineCS4bpxBY8oM24-GTnrzWNsWZC7PAZ9ZHSSrq4f4zGhmw3jUtPB8H3Fy_XCKGd4I1tMrKwbp5Ic6Jvvhqepi6PCKHTDNMAeVx-sQBqKOHfPy-2GT9-IWysd6JpTPFEwlh2_7M6XH3x2-IUYnwJF1u4P3MgWvCevNhMU0ngeA8aUqZAgGEvUOTGcFQm71RF9brNsN3NSdxVpknZt5zaV3owzYchU8uk",
-							"alt": "SEO pricing guide",
-							"filename": "seo-pricing.jpg"
-						}
-					},
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Understanding SEO pricing is crucial for making informed investment decisions. This guide breaks down the most common pricing models and what you should expect at each level." }] }
-					]
-				},
-				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["market-insights"],
-					"tag": ["seo", "pricing"]
-				}
+				"taxonomies": { "category": ["featured-guide"], "tag": ["geo", "ai"] }
 			},
 			{
 				"id": "seo-vs-geo",
@@ -597,7 +300,7 @@
 					"excerpt": "Understanding the fundamental differences between ranking for search engines and ranking for large language models.",
 					"read_time": "8 min read",
 					"featured": false,
-					"display_order": 3,
+					"display_order": 2,
 					"featured_image": {
 						"$media": {
 							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuAoOr6UMhtnPPwwCK05gXzjFq6z1lSX42tU08NcVBXiBnHO3mfvgalRDcctPzaW99C99dkC6OUuS1w44vwS_A9VIeEG-B1XjnXeGsFiUvawYcKEg-TqXyw6KobUzkOjIOssm3AUjU77-ALkqhf96V5PPWBEmBtwG_5nQ9i9nxK1m3vPzgLD3Zfucf9cQAKDGtqJLMYC7gRvyukeMyAb0PPedlOeO_cPW34aP_vqbTuwl6s0ZeKo2qvU4i5zZX0RuFvTagRKpzAPrRY",
@@ -610,37 +313,7 @@
 					]
 				},
 				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["strategy"],
-					"tag": ["seo", "geo"]
-				}
-			},
-			{
-				"id": "seo-without-agency",
-				"slug": "seo-without-agency-in-house",
-				"status": "published",
-				"data": {
-					"title": "Can You Do SEO Without an Agency? The In-House Reality Check",
-					"excerpt": "Evaluating the resources, technology stack, and talent required to run a successful internal SEO program versus outsourcing.",
-					"read_time": "12 min read",
-					"featured": false,
-					"display_order": 4,
-					"featured_image": {
-						"$media": {
-							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuClb51AeqRMOZT33LqRgVh1lipDx4wwvQJph9Z0GQmJ6dx2McKDrb7UHBq9iqoqEkSl9_MDcuaq5ZimULx6w_UEh2b7o4EdiHDWVQUQRz3wy5lanbxkRMvcuCDJOqM3ZLTsUIj1XCZDXikd7h8K3lUS38-J0Qpf4zf90YfoR5Pubc4Tmx4qzCcQJo_nJPS528EXRk21_62YBN4raqrsTmTBhf6XVbDoVlfx8x9zcShQkzukBTJpABl6SKbBkH5IZ9oQnhhy3ve6WHo",
-							"alt": "In-house SEO",
-							"filename": "seo-in-house.jpg"
-						}
-					},
-					"content": [
-						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "The decision between building an in-house SEO team and partnering with an agency is one of the most consequential choices a growing business can make." }] }
-					]
-				},
-				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["agency-reviews"],
-					"tag": ["seo"]
-				}
+				"taxonomies": { "category": ["strategy"], "tag": ["seo", "geo"] }
 			},
 			{
 				"id": "geo-playbook-citations",
@@ -651,16 +324,20 @@
 					"excerpt": "Mastering the art of appearing in ChatGPT's \"Sources\" footer.",
 					"read_time": "5 min read",
 					"featured": false,
-					"display_order": 5,
+					"display_order": 3,
+					"featured_image": {
+						"$media": {
+							"url": "https://lh3.googleusercontent.com/aida-public/AB6AXuBq42o-8YXhd-nWWOeNfVRr0eIkkzs3Yv7VMUn_jhaycbeineCS4bpxBY8oM24-GTnrzWNsWZC7PAZ9ZHSSrq4f4zGhmw3jUtPB8H3Fy_XCKGd4I1tMrKwbp5Ic6Jvvhqepi6PCKHTDNMAeVx-sQBqKOHfPy-2GT9-IWysd6JpTPFEwlh2_7M6XH3x2-IUYnwJF1u4P3MgWvCevNhMU0ngeA8aUqZAgGEvUOTGcFQm71RF9brNsN3NSdxVpknZt5zaV3owzYchU8uk",
+							"alt": "GEO citations playbook",
+							"filename": "geo-citations.jpg"
+						}
+					},
 					"content": [
 						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Citations in generative AI responses are the new backlinks. Understanding how to earn them is crucial for modern search visibility." }] }
 					]
 				},
 				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["ai-optimization"],
-					"tag": ["geo", "ai"]
-				}
+				"taxonomies": { "category": ["ai-optimization"], "tag": ["geo", "ai"] }
 			},
 			{
 				"id": "llm-branding",
@@ -671,16 +348,13 @@
 					"excerpt": "How to correct misinformation about your brand in Gemini & Claude.",
 					"read_time": "8 min read",
 					"featured": false,
-					"display_order": 6,
+					"display_order": 4,
 					"content": [
 						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Large Language Models can misrepresent your brand. Learn how to establish factual accuracy across AI platforms." }] }
 					]
 				},
 				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["ai-optimization"],
-					"tag": ["llm", "ai"]
-				}
+				"taxonomies": { "category": ["ai-optimization"], "tag": ["llm", "ai"] }
 			},
 			{
 				"id": "vector-search",
@@ -691,16 +365,13 @@
 					"excerpt": "Moving from keyword strings to high-dimensional intent.",
 					"read_time": "12 min read",
 					"featured": false,
-					"display_order": 7,
+					"display_order": 5,
 					"content": [
 						{ "_type": "block", "style": "normal", "children": [{ "_type": "span", "text": "Vector search represents a fundamental shift in how content is discovered and ranked. Understanding high-dimensional intent is key to future-proofing your content strategy." }] }
 					]
 				},
 				"bylines": [{ "byline": "byline-editorial" }],
-				"taxonomies": {
-					"category": ["strategy"],
-					"tag": ["content-strategy", "ai"]
-				}
+				"taxonomies": { "category": ["strategy"], "tag": ["content-strategy", "ai"] }
 			}
 		]
 	}

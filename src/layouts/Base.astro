@@ -25,25 +25,25 @@ const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
 
 const menu = await getMenu("primary");
 
-const footerTagline = "Curating the world's most sophisticated digital search partners for the intelligence era.";
+const footerTagline = "Insights on SEO, AI optimization, and the future of search — built for the intelligence era.";
 const copyrightText = `\u00A9 ${new Date().getFullYear()} FindAnSEOAgency`;
 const footerColumns = [
   {
-    title: "Directory",
+    title: "Content",
     links: [
-      { label: "Top Agencies", href: "/" },
-      { label: "Pricing Models", href: "/seo-agencies" },
-      { label: "Case Studies", href: "#" },
-      { label: "Reviews", href: "#" },
+      { label: "Blog", href: "/blog" },
+      { label: "AI Optimization", href: "/ai-optimization" },
+      { label: "Search Trends", href: "/blog" },
+      { label: "Guides", href: "/blog" },
     ],
   },
   {
-    title: "Knowledge",
+    title: "Topics",
     links: [
-      { label: "AI Optimization", href: "/ai-optimization" },
-      { label: "Search Trends", href: "#" },
-      { label: "SEO Basics", href: "/seo-agencies" },
-      { label: "Webinars", href: "#" },
+      { label: "GEO", href: "/blog" },
+      { label: "LLM Optimization", href: "/blog" },
+      { label: "Content Strategy", href: "/blog" },
+      { label: "Technical SEO", href: "/blog" },
     ],
   },
   {
@@ -111,7 +111,7 @@ const pageCtx = createPublicPageContext({
         <input
           id="search-input"
           class="flex-grow py-2 text-base md:text-lg font-body text-on-dark placeholder:text-on-dark-faint bg-transparent focus:outline-none min-w-0"
-          placeholder="Search agencies..."
+          placeholder="Search articles, guides..."
           type="text"
           autocomplete="off"
         />
