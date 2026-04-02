@@ -343,13 +343,18 @@ const pageCtx = createPublicPageContext({
     })();
   </script>
 
-  <!-- ═══════ SERVICE ROW TAP (mobile) ═══════ -->
+  <!-- ═══════ SERVICE ROW TAP ═══════ -->
   <script>
     (function serviceRowTap() {
+      const isTouchDevice = window.matchMedia('(hover: none)').matches;
+      if (!isTouchDevice) return;
       document.querySelectorAll('.service-row').forEach((row) => {
         row.addEventListener('click', () => {
-          if (window.innerWidth >= 768) return;
-          row.classList.toggle('active');
+          const wasActive = row.classList.contains('active');
+          // Close all others first
+          document.querySelectorAll('.service-row.active').forEach((r) => r.classList.remove('active'));
+          // Toggle clicked one
+          if (!wasActive) row.classList.add('active');
         });
       });
     })();
