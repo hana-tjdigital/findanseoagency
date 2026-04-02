@@ -165,6 +165,9 @@ const sections = page?.data?.sections || {};
     <!-- ═══════ TOP RATED ═══════ -->
     {otherAgencies.length > 0 && (
       <section id="top-rated" class="py-24 md:py-32 px-6 md:px-10 bg-dark text-on-dark relative overflow-hidden grain">
+        <!-- Ambient canvas -->
+        <canvas id="rated-canvas" class="absolute inset-0 z-0" aria-hidden="true"></canvas>
+
         <div class="flex flex-col md:flex-row md:items-end gap-6 mb-16 relative z-[2]">
           <span class="section-label text-orange-light">04</span>
           <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight leading-[0.9]">Top rated</h2>
@@ -254,10 +257,16 @@ const sections = page?.data?.sections || {};
 
   </main>
 
-  <!-- ═══════ HERO CANVAS ═══════ -->
+  <!-- ═══════ SCRIPTS ═══════ -->
   <script>
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+
+    /* ─────────────────────────────────────────────
+       HERO — Flowing magnetic field lines
+       Lines flow across the screen like a fluid.
+       Mouse acts as a vortex that warps the flow.
+    ───────────────────────────────────────────── */
     (function heroCanvas() {
       const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
       if (!canvas) return;
@@ -266,28 +275,31 @@ const sections = page?.data?.sections || {};
       let w = 0, h = 0;
       let mouse = { x: -9999, y: -9999, active: false };
       let smoothMouse = { x: -9999, y: -9999 };
-      let isVisible = true;
-      let animId = 0;
-      const LINE_COUNT = 20;
-      const STEP = 14;
+
+      const LINE_COUNT = 40;
+      const STEP = 8;
 
       function resize() {
         const r = section.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         w = r.width; h = r.height;
-        canvas.width = w; canvas.height = h;
+        canvas.width = w * dpr; canvas.height = h * dpr;
         canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
 
+      // Noise helper — simple layered sine approximation
       function noise(x: number, y: number, t: number) {
         return Math.sin(x * 0.003 + t * 0.0004) * 0.6
              + Math.sin(y * 0.004 - t * 0.0003) * 0.4
-             + Math.sin((x + y) * 0.002 + t * 0.0005) * 0.3;
+             + Math.sin((x + y) * 0.002 + t * 0.0005) * 0.3
+             + Math.cos(x * 0.005 - y * 0.003 + t * 0.0002) * 0.2;
       }
 
       function draw(time: number) {
-        if (!isVisible) return;
         ctx.clearRect(0, 0, w, h);
+
+        // Smooth mouse position for organic feel
         if (mouse.active) {
           smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
           smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
@@ -295,51 +307,64 @@ const sections = page?.data?.sections || {};
           smoothMouse.x += (-9999 - smoothMouse.x) * 0.02;
           smoothMouse.y += (-9999 - smoothMouse.y) * 0.02;
         }
+
         for (let i = 0; i < LINE_COUNT; i++) {
           const baseY = (h / (LINE_COUNT - 1)) * i;
           const drift = Math.sin(time * 0.0003 + i * 0.7) * 25;
           let px = -20;
           let py = baseY + drift;
+
           ctx.beginPath();
           ctx.moveTo(px, py);
+
           const maxSteps = Math.ceil((w + 40) / STEP);
           for (let s = 0; s < maxSteps; s++) {
+            // Flow direction from noise field
             const angle = noise(px, py, time) * 0.8;
             let dx = Math.cos(angle) * STEP;
             let dy = Math.sin(angle) * STEP * 0.6;
+
+            // Mouse vortex — swirl lines around cursor
             const mx = px - smoothMouse.x;
             const my = py - smoothMouse.y;
             const mDist = Math.sqrt(mx * mx + my * my);
-            if (mDist < 250 && mDist > 1) {
-              const strength = ((250 - mDist) / 250);
+            const RADIUS = 250;
+            if (mDist < RADIUS && mDist > 1) {
+              const strength = ((RADIUS - mDist) / RADIUS);
               const curve = strength * strength * 4;
+              // Perpendicular push creates swirl
               dx += (-my / mDist) * curve * STEP * 0.5;
               dy += (mx / mDist) * curve * STEP * 0.5;
             }
+
             px += dx;
             py += dy;
             ctx.lineTo(px, py);
+
             if (px > w + 40) break;
           }
+
+          // Glow intensity — brighter near center, dimmer at edges
           const verticalPos = baseY / h;
           const edgeFade = 1 - Math.abs(verticalPos - 0.5) * 1.6;
-          const alpha = Math.max(0, 0.03 + edgeFade * 0.04);
+          const alpha = Math.max(0, 0.03 + edgeFade * 0.04 + Math.sin(time * 0.001 + i * 0.3) * 0.015);
+
           ctx.strokeStyle = `rgba(255, 95, 0, ${alpha})`;
-          ctx.lineWidth = 1;
+          ctx.lineWidth = 1 + edgeFade * 0.5;
           ctx.stroke();
         }
-        if (!reducedMotion) animId = requestAnimationFrame(draw);
-      }
 
-      // Only animate when hero is visible
-      const observer = new IntersectionObserver(([entry]) => {
-        isVisible = entry.isIntersecting;
-        if (isVisible && !reducedMotion) {
-          cancelAnimationFrame(animId);
-          animId = requestAnimationFrame(draw);
+        // Glow hotspot at mouse
+        if (mouse.active) {
+          const grd = ctx.createRadialGradient(smoothMouse.x, smoothMouse.y, 0, smoothMouse.x, smoothMouse.y, 200);
+          grd.addColorStop(0, 'rgba(255, 95, 0, 0.06)');
+          grd.addColorStop(1, 'rgba(255, 95, 0, 0)');
+          ctx.fillStyle = grd;
+          ctx.fillRect(smoothMouse.x - 200, smoothMouse.y - 200, 400, 400);
         }
-      }, { threshold: 0.1 });
-      observer.observe(section);
+
+        if (!reducedMotion) requestAnimationFrame(draw);
+      }
 
       section.addEventListener('mousemove', (e) => {
         const r = section.getBoundingClientRect();
@@ -349,8 +374,101 @@ const sections = page?.data?.sections || {};
       });
       section.addEventListener('mouseleave', () => { mouse.active = false; });
       window.addEventListener('resize', resize);
+
       resize();
-      if (!reducedMotion) animId = requestAnimationFrame(draw); else draw(0);
+      if (!reducedMotion) requestAnimationFrame(draw); else draw(0);
+    })();
+
+
+    /* ─────────────────────────────────────────────
+       TOP RATED — Drifting aurora bands
+       Slow, ambient, horizontal light bands that
+       breathe and shift. No mouse interaction needed.
+    ───────────────────────────────────────────── */
+    (function ratedCanvas() {
+      const canvas = document.getElementById('rated-canvas') as HTMLCanvasElement;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d')!;
+      const section = document.getElementById('top-rated')!;
+      let w = 0, h = 0;
+
+      interface Band {
+        y: number; amp: number; freq: number; speed: number;
+        alpha: number; width: number; phase: number;
+      }
+      const bands: Band[] = [];
+
+      function resize() {
+        const r = section.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = r.width; h = r.height;
+        canvas.width = w * dpr; canvas.height = h * dpr;
+        canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function init() {
+        resize();
+        bands.length = 0;
+        for (let i = 0; i < 6; i++) {
+          bands.push({
+            y: h * (0.1 + i * 0.16),
+            amp: 30 + Math.random() * 50,
+            freq: 0.001 + Math.random() * 0.002,
+            speed: 0.0002 + Math.random() * 0.0004,
+            alpha: 0.015 + Math.random() * 0.025,
+            width: 60 + Math.random() * 120,
+            phase: Math.random() * Math.PI * 2,
+          });
+        }
+      }
+
+      function draw(time: number) {
+        ctx.clearRect(0, 0, w, h);
+
+        for (const b of bands) {
+          const step = 12;
+          const points: {x: number; y: number}[] = [];
+
+          for (let x = -step; x <= w + step; x += step) {
+            const y = b.y
+              + Math.sin(x * b.freq + time * b.speed + b.phase) * b.amp
+              + Math.cos(x * b.freq * 0.6 + time * b.speed * 1.5 + b.phase * 2) * b.amp * 0.4;
+            points.push({ x, y });
+          }
+
+          // Draw as a filled gradient band
+          const halfW = b.width / 2;
+          ctx.beginPath();
+          ctx.moveTo(points[0].x, points[0].y - halfW);
+          for (let i = 1; i < points.length; i++) {
+            const xc = (points[i - 1].x + points[i].x) / 2;
+            const yc = (points[i - 1].y + points[i].y) / 2 - halfW;
+            ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y - halfW, xc, yc);
+          }
+          for (let i = points.length - 1; i >= 1; i--) {
+            const xc = (points[i].x + points[i - 1].x) / 2;
+            const yc = (points[i].y + points[i - 1].y) / 2 + halfW;
+            ctx.quadraticCurveTo(points[i].x, points[i].y + halfW, xc, yc);
+          }
+          ctx.closePath();
+
+          const grd = ctx.createLinearGradient(0, b.y - halfW, 0, b.y + halfW);
+          grd.addColorStop(0, 'rgba(255, 95, 0, 0)');
+          grd.addColorStop(0.35, `rgba(255, 95, 0, ${b.alpha * 0.7})`);
+          grd.addColorStop(0.5, `rgba(255, 95, 0, ${b.alpha})`);
+          grd.addColorStop(0.65, `rgba(255, 95, 0, ${b.alpha * 0.7})`);
+          grd.addColorStop(1, 'rgba(255, 95, 0, 0)');
+          ctx.fillStyle = grd;
+          ctx.fill();
+        }
+
+        if (!reducedMotion) requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { init(); });
+      init();
+      if (!reducedMotion) requestAnimationFrame(draw); else draw(0);
     })();
   </script>
 </Base>
