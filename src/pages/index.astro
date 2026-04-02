@@ -260,16 +260,19 @@ const sections = page?.data?.sections || {};
   <!-- ═══════ SCRIPTS ═══════ -->
   <script>
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isRetina = window.devicePixelRatio > 1;
 
 
     /* ─────────────────────────────────────────────
        HERO — Flowing magnetic field lines
        Lines flow across the screen like a fluid.
        Mouse acts as a vortex that warps the flow.
+       Disabled on Retina displays for performance.
     ───────────────────────────────────────────── */
     (function heroCanvas() {
       const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement;
       if (!canvas) return;
+      if (isRetina) { canvas.style.display = 'none'; return; }
       const ctx = canvas.getContext('2d')!;
       const section = document.getElementById('hero')!;
       let w = 0, h = 0;
@@ -388,6 +391,7 @@ const sections = page?.data?.sections || {};
     (function ratedCanvas() {
       const canvas = document.getElementById('rated-canvas') as HTMLCanvasElement;
       if (!canvas) return;
+      if (isRetina) { canvas.style.display = 'none'; return; }
       const ctx = canvas.getContext('2d')!;
       const section = document.getElementById('top-rated')!;
       let w = 0, h = 0;
