@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "my-emdash-site",
+	"name": "findanseoagency",
 	"main": "./src/worker.ts",
 	"compatibility_date": "2026-03-29",
 	"compatibility_flags": [
@@ -9,19 +9,25 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "my-emdash-site",
-			"database_id": "1820e379-974f-41ee-a257-19f7a32ce004"
+			"database_name": "findanseoagency",
+			"database_id": "281bd325-889e-4ac3-87e4-76b23f104775"
 		},
 	],
 	"r2_buckets": [
 		{
 			"binding": "MEDIA",
-			"bucket_name": "my-emdash-media",
+			"bucket_name": "findanseoagency-media",
 		},
 	],
 	"observability": {
 		"enabled": true,
 	},
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "eae1886e84a4422587d3dedacab21561"
+		}
+	],
 	"worker_loaders": [
 		{
 			"binding": "LOADER",
