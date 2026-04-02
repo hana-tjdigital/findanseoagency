@@ -1,15 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getEmDashEntry, getEmDashCollection } from 'emdash';
+import { Image } from 'emdash/ui';
 
 const [pageRes, postsRes] = await Promise.all([
   getEmDashEntry('pages', 'home'),
   getEmDashCollection('posts', { orderBy: { display_order: 'asc' }, limit: 4 }),
 ]);
 const { entry: page, cacheHint: pageCH } = pageRes;
-const { entries: posts } = postsRes;
+const { entries: posts, cacheHint: postsCH } = postsRes;
 
 Astro.cache.set(pageCH);
+Astro.cache.set(postsCH);
 
 const sections = page?.data?.sections || {};
 const featuredPost = posts.find((p: any) => p.data.featured);
@@ -64,14 +66,16 @@ const recentPosts = posts.filter((p: any) => !p.data.featured && p.data.featured
     </div>
 
     <!-- ═══════ FEATURED POST ═══════ -->
-    {featuredPost && featuredPost.data.featured_image?.src && (
+    {featuredPost && featuredPost.data.featured_image && (
       <section class="pt-28 md:pt-36 px-6 md:px-10 pb-16">
         <div class="flex flex-col md:flex-row md:items-end gap-6 mb-16">
           <span class="section-label">01</span>
           <h2 class="font-display text-5xl md:text-7xl font-700 tracking-tight text-dark leading-[0.9]">Latest Insights</h2>
         </div>
         <article class="relative min-h-[60vh] rounded-3xl overflow-hidden cursor-pointer group">
-          <img class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={featuredPost.data.title} src={featuredPost.data.featured_image.src} />
+          <div class="absolute inset-0" {...featuredPost.edit.featured_image}>
+            <Image image={featuredPost.data.featured_image} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          </div>
           <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/70 to-dark/20"></div>
           <div class="absolute inset-0 bg-orange/5 mix-blend-multiply"></div>
           <a href={`/posts/${featuredPost.id}`} class="absolute bottom-0 left-0 right-0 p-8 md:p-14 z-10 no-underline">
@@ -79,10 +83,10 @@ const recentPosts = posts.filter((p: any) => !p.data.featured && p.data.featured
               <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-orange bg-orange/15 px-3 py-1 rounded-full">Featured</span>
               <span class="font-mono text-[10px] tracking-wider text-white/50">{featuredPost.data.read_time}</span>
             </div>
-            <h2 class="font-display text-3xl md:text-5xl font-700 tracking-tight text-white leading-[0.95] max-w-2xl group-hover:text-orange transition-colors duration-300">
+            <h2 class="font-display text-3xl md:text-5xl font-700 tracking-tight text-white leading-[0.95] max-w-2xl group-hover:text-orange transition-colors duration-300" {...featuredPost.edit.title}>
               {featuredPost.data.title}
             </h2>
-            <p class="text-white/60 text-base leading-relaxed mt-4 max-w-lg">{featuredPost.data.excerpt}</p>
+            <p class="text-white/60 text-base leading-relaxed mt-4 max-w-lg" {...featuredPost.edit.excerpt}>{featuredPost.data.excerpt}</p>
             <div class="mt-8 flex items-center gap-3">
               <span class="font-display text-sm font-500 text-white">Read article</span>
               <svg class="text-orange group-hover:translate-x-2 transition-transform duration-300" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -98,9 +102,9 @@ const recentPosts = posts.filter((p: any) => !p.data.featured && p.data.featured
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {recentPosts.map((post: any) => (
             <a href={`/posts/${post.id}`} class="group cursor-pointer no-underline block">
-              {post.data.featured_image?.src && (
-                <div class="relative overflow-hidden rounded-2xl aspect-[3/2] mb-5">
-                  <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={post.data.title} src={post.data.featured_image.src} />
+              {post.data.featured_image && (
+                <div class="relative overflow-hidden rounded-2xl aspect-[3/2] mb-5" {...post.edit.featured_image}>
+                  <Image image={post.data.featured_image} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   <div class="absolute inset-0 bg-orange/5 mix-blend-multiply"></div>
                 </div>
               )}
@@ -109,8 +113,8 @@ const recentPosts = posts.filter((p: any) => !p.data.featured && p.data.featured
                 <span class="w-1 h-1 rounded-full bg-ink-faint"></span>
                 <span class="font-mono text-[10px] text-ink-muted">{post.data.read_time}</span>
               </div>
-              <h3 class="font-display text-xl font-600 text-dark group-hover:text-orange transition-colors duration-300">{post.data.title}</h3>
-              <p class="text-ink-light text-sm line-clamp-2 mt-2 leading-relaxed">{post.data.excerpt}</p>
+              <h3 class="font-display text-xl font-600 text-dark group-hover:text-orange transition-colors duration-300" {...post.edit.title}>{post.data.title}</h3>
+              <p class="text-ink-light text-sm line-clamp-2 mt-2 leading-relaxed" {...post.edit.excerpt}>{post.data.excerpt}</p>
             </a>
           ))}
         </div>
@@ -130,19 +134,51 @@ const recentPosts = posts.filter((p: any) => !p.data.featured && p.data.featured
           <h2 class="font-display text-5xl md:text-8xl font-700 tracking-tight text-on-dark leading-[0.85] mt-6">{page.data.cta_title}</h2>
           <p class="text-on-dark-muted text-lg leading-relaxed mt-6 mb-12 max-w-md">{page.data.cta_description}</p>
           <div class="max-w-md">
-            <div class="flex items-center bg-white/5 border border-white/10 rounded-full overflow-hidden hover:border-orange/30 transition-colors duration-500">
-              <input class="flex-grow py-4 px-6 text-sm font-body text-on-dark placeholder:text-on-dark-faint bg-transparent focus:outline-none" placeholder="Enter your business email" type="email" />
-              <button class="bg-orange hover:bg-orange-dim text-white m-1.5 px-6 py-3 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 whitespace-nowrap hover:shadow-[0_0_30px_rgba(255,95,0,0.3)]">
+            <form class="newsletter-form flex items-center bg-white/5 border border-white/10 rounded-full overflow-hidden hover:border-orange/30 transition-colors duration-500" data-form-id="newsletter">
+              <input name="email" class="flex-grow py-4 px-6 text-sm font-body text-on-dark placeholder:text-on-dark-faint bg-transparent focus:outline-none" placeholder="Enter your business email" type="email" required />
+              <button type="submit" class="bg-orange hover:bg-orange-dim text-white m-1.5 px-6 py-3 rounded-full font-display text-sm font-500 cursor-pointer transition-all duration-300 whitespace-nowrap hover:shadow-[0_0_30px_rgba(255,95,0,0.3)]">
                 {page.data.cta_btn_text}
               </button>
-            </div>
-            <p class="mt-4 font-mono text-[10px] tracking-wider text-on-dark-faint ml-6">Join 15,000+ marketers. No spam.</p>
+            </form>
+            <p class="newsletter-status mt-4 font-mono text-[10px] tracking-wider text-on-dark-faint ml-6">Join 15,000+ marketers. No spam.</p>
           </div>
         </div>
       </section>
     )}
 
   </main>
+
+  <!-- ═══════ NEWSLETTER FORM ═══════ -->
+  <script>
+    document.querySelectorAll('.newsletter-form').forEach((form) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = e.target as HTMLFormElement;
+        const email = (f.querySelector('input[name="email"]') as HTMLInputElement).value;
+        const status = f.parentElement?.querySelector('.newsletter-status');
+        const btn = f.querySelector('button[type="submit"]') as HTMLButtonElement;
+        btn.disabled = true;
+        btn.textContent = '...';
+        try {
+          const res = await fetch('/_emdash/api/plugins/forms/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ formId: 'newsletter', data: { email } }),
+          });
+          if (res.ok) {
+            if (status) { status.textContent = 'Thanks! You\'re subscribed.'; status.classList.add('text-orange'); }
+            f.reset();
+          } else {
+            if (status) status.textContent = 'Something went wrong. Try again.';
+          }
+        } catch {
+          if (status) status.textContent = 'Something went wrong. Try again.';
+        }
+        btn.disabled = false;
+        btn.textContent = 'Subscribe';
+      });
+    });
+  </script>
 
   <!-- ═══════ HERO CANVAS ═══════ -->
   <script>
